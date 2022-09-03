@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public abstract class MonoSingleton : MonoBehaviour
+public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 {
-    protected static MonoSingleton _instance = null;
+    protected static T _instance = null;
+    public static T Instance => _instance;
 
     void Awake()
     {
         if (_instance == null)
         {
             DontDestroyOnLoad(this.gameObject);
-            _instance = this;
+            _instance = this as T;
         }
         else
         {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class SceneManager : MonoSingleton
+public class SceneManager : MonoSingleton<SceneManager>
 {
-    public static SceneManager Instance => (SceneManager)_instance;
 
     private SceneDefine.Scene _currentScene;
 
