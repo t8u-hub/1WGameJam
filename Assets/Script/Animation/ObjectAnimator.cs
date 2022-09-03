@@ -6,6 +6,8 @@ public class ObjectAnimator : MonoBehaviour
 {
     private CanvasGroup _canvasGroup = null;
 
+    #region フェード
+
     public void PlayFade(float start, float end, Action onComplete, float dulation = .2f)
     {
         UIManager.Instance.StartCoroutine(PlayFadeInner(start, end, onComplete, dulation));
@@ -41,4 +43,6 @@ public class ObjectAnimator : MonoBehaviour
         _canvasGroup.alpha = end;
         onComplete?.Invoke();
     }
+
+    #endregion
 }

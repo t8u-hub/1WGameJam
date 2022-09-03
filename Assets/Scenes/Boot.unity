@@ -707,7 +707,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiCanvas: {fileID: 1635359657}
+  _uiGraphicRaycaster: {fileID: 1635359655}
   _systemUiCanvas: {fileID: 1230273123}
+  _systemUiGraphicRaycaster: {fileID: 1230273121}
   _fadeAnimator: {fileID: 338281139}
 --- !u!1 &1597607514
 GameObject:

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
@@ -14,7 +15,14 @@ public class UIManager : MonoSingleton<UIManager>
     private Canvas _uiCanvas;
 
     [SerializeField]
+    private GraphicRaycaster _uiGraphicRaycaster;
+
+    [SerializeField]
     private Canvas _systemUiCanvas;
+
+    [SerializeField]
+
+    private GraphicRaycaster _systemUiGraphicRaycaster;
 
     [SerializeField]
     private ObjectAnimator _fadeAnimator;
@@ -57,5 +65,17 @@ public class UIManager : MonoSingleton<UIManager>
     public void FadeOut(System.Action onComplete)
     {
         _fadeAnimator.PlayFade(0, 1, onComplete);
+    }
+
+    public void LockGameCanvas()
+    {
+        _uiGraphicRaycaster.enabled = false;
+        _systemUiGraphicRaycaster.enabled = false;
+    }
+
+    public void UnlockGameCanvas()
+    {
+        _uiGraphicRaycaster.enabled = true;
+        _systemUiGraphicRaycaster.enabled = true;
     }
 }

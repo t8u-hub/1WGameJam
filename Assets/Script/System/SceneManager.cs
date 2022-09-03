@@ -8,6 +8,8 @@ public class SceneManager : MonoSingleton<SceneManager>
 
     private SceneDefine.Scene _currentScene;
 
+    private bool _isChangeing = false;
+
     public void ChangeScene(SceneDefine.Scene nextScene)
     {
         StartCoroutine(ChangeSceneCoroutine(nextScene));
@@ -15,6 +17,15 @@ public class SceneManager : MonoSingleton<SceneManager>
 
     private IEnumerator ChangeSceneCoroutine(SceneDefine.Scene nextScene)
     {
+        if (_isChangeing)
+        {
+            yield break;
+        }
+
+        _isChangeing = true;
+
+        UIManager.Instance.LockGameCanvas();
+
         var currentSceneController = SceneDefine.SCENE_CONTROLLER_DICT[_currentScene];
         var nextSceneController = SceneDefine.SCENE_CONTROLLER_DICT[nextScene];
 
@@ -40,6 +51,10 @@ public class SceneManager : MonoSingleton<SceneManager>
 
         UIManager.Instance.FadeIn(() => complete = true);
         yield return waitComplete;
+
+        UIManager.Instance.UnlockGameCanvas();
+
+        _isChangeing = false;
     }
 
     public void BootScene(SceneDefine.Scene nextScene)
