@@ -18,6 +18,11 @@ public class SceneManager : MonoSingleton<SceneManager>
         var currentSceneController = SceneDefine.SCENE_CONTROLLER_DICT[_currentScene];
         var nextSceneController = SceneDefine.SCENE_CONTROLLER_DICT[nextScene];
 
+        var complete = false;
+        var waitComplete = new WaitUntil(() => complete);
+        UIManager.Instance.FadeOut(() => complete = true);
+        yield return waitComplete;
+
         // 前のシーンの終了処理
         yield return currentSceneController.OnEndScene();
 
@@ -32,6 +37,9 @@ public class SceneManager : MonoSingleton<SceneManager>
 
         // 次のシーンの初期化処理
         yield return nextSceneController.OnLoadScene();
+
+        UIManager.Instance.FadeIn(() => complete = true);
+        yield return waitComplete;
     }
 
     public void BootScene(SceneDefine.Scene nextScene)

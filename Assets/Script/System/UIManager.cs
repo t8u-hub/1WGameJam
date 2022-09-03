@@ -16,6 +16,9 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField]
     private Canvas _systemUiCanvas;
 
+    [SerializeField]
+    private ObjectAnimator _fadeAnimator;
+
     /// <summary>
     /// 指定されたprefabをキャンバス以下に生成
     /// </summary>
@@ -44,5 +47,15 @@ public class UIManager : MonoSingleton<UIManager>
     {
         ClearnUi(UiType.Normal);
         ClearnUi(UiType.System);
+    }
+
+    public void FadeIn(System.Action onComplete)
+    {
+        _fadeAnimator.PlayFade(1, 0, onComplete);
+    }
+
+    public void FadeOut(System.Action onComplete)
+    {
+        _fadeAnimator.PlayFade(0, 1, onComplete);
     }
 }
