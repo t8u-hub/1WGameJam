@@ -26,9 +26,28 @@ public abstract class SceneControllerBase<T> : SceneData where T : SceneViewBase
     {
         _view = view as T;
     }
+
+    public override IEnumerator OnLoadScene()
+    {
+        if (_view.UiBase != null)
+        {
+            var uiBase = UIManager.Instance.CreateUi(_view.UiBase.gameObject).GetComponent<UiBase>();
+            uiBase.Initialize();
+        }
+
+        yield return base.OnLoadScene();
+    }
+
+    public override IEnumerator OnEndScene()
+    {
+        UIManager.Instance.CleanAllUi();
+        yield return base.OnEndScene();
+    }
 }
 
 public class SceneViewBase : MonoBehaviour 
 {
-
+    [SerializeField]
+    private UiBase _uiBase;
+    public UiBase UiBase => _uiBase;
 }
