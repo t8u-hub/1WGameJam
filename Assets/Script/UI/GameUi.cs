@@ -16,7 +16,7 @@ public class GameUi : UiBase
         var battleManager = BattleManager.Instance;
         if (battleManager == null)
         {
-            Debug.LogError("BattleManager‚ª‚È‚¢");
+            Debug.LogError("BattleManagerãŒãªã„");
             return;
         }
 
@@ -24,4 +24,5 @@ public class GameUi : UiBase
         _button.onClick.AddListener(() => { });
         _button.gameObject.SetActive(false);
     }
+
 }

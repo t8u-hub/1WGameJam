@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyManager : MonoBehaviour
 {
     private Transform _targetTransform;
@@ -26,7 +27,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®‚Ì–Ú“I’nTransform‚ğİ’è
+    /// ç§»å‹•ã®ç›®çš„åœ°Transformã‚’è¨­å®š
     /// </summary>
     public void SetTargetTransform(Transform transform)
     {

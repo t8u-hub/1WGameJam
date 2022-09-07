@@ -11,3 +11,4 @@ public class TitleUi : UiBase
         _button.onClick.AddListener(() => SceneManager.Instance.ChangeScene(SceneDefine.Scene.Game));
     }
 }
+
