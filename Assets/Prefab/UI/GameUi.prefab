@@ -252,7 +252,7 @@ PrefabInstance:
     - target: {fileID: 2158055412843701653, guid: 882d277b38daf054d8ea9ebdf84baa73,
         type: 3}
       propertyPath: m_Text
-      value: "\u30BF\u30A4\u30C8\u30EB\u3078\u623B\u308B"
+      value: "\u30B9\u30BF\u30FC\u30C8"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 882d277b38daf054d8ea9ebdf84baa73, type: 3}

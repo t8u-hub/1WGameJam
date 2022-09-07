@@ -8,6 +8,7 @@ TagManager:
   - RootGround
   - LeftWall
   - RightWall
+  - Enemy
   layers:
   - Default
   - TransparentFX
