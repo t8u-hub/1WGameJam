@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -102,6 +102,7 @@ public class SceneDefine
         Title,
         Tutorial,
         Game,
+        Result,
     }
 
     public static readonly Dictionary<Scene, SceneData> SCENE_CONTROLLER_DICT = new Dictionary<Scene, SceneData>
@@ -109,5 +110,6 @@ public class SceneDefine
         { Scene.Title, new TitleSceneController() },
         { Scene.Tutorial, new TutorialSceneController() },
         { Scene.Game, new GameSceneController() },
+        { Scene.Result, new ResultSceneController() },
     };
 }
