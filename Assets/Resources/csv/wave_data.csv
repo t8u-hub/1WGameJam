@@ -1,0 +1,4 @@
+wave,type,inflation_coef,gage_coef,value1,value2,value3,value4,value5
+1,1,10000,10000,0,0,0,0,0
+2,2,11000,50000,70000,0,0,0,0
+3,3,12000,350000,201,203,204,0,0

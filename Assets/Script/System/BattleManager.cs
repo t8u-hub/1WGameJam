@@ -17,12 +17,37 @@ public class BattleManager : MonoSingleton<BattleManager>
     private Transform _playerSpawnPoint;
 
     [SerializeField]
-    private EnemyManager[] _enemyPrefabArray;
+    private Enemy[] _enemyPrefabArray;
 
     [SerializeField]
     private Transform[] _enemySpawnPointArray;
 
     private Transform _playerTransform;
+
+    /// <summary>
+    /// 獲得済のアイテムID
+    /// </summary>
+    private List<int> GetItemIdList = new List<int>();
+
+    /// <summary>
+    /// 現在の必殺技ゲージの値
+    /// </summary>
+    public int CurrentGauge { get; private set; }
+
+    /// <summary>
+    /// 現在のプレイヤーHP
+    /// </summary>
+    public int CurrentHp { get; private set; }
+
+    /// <summary>
+    /// 現在のスコア
+    /// </summary>
+    public int CurrentScore { get; private set; }
+
+    /// <summary>
+    /// 表示中の敵一覧
+    /// </summary>
+    private List<Enemy> _enemyList = new List<Enemy>();
 
     void Awake()
     {
@@ -42,21 +67,22 @@ public class BattleManager : MonoSingleton<BattleManager>
         playerObj.transform.localPosition = Vector3.zero;
         _playerTransform = playerObj.transform;
 
-        var enemySpawnManager = new EnemySpawnManager();
+        var enemySpawnManager = new BattleWaveModel();
     }
 
     public void SpawnEnemy()
     {
         var enemyPrefab = _enemyPrefabArray[0];
         var spawnPoint = _enemySpawnPointArray[0];
-        var parameter = new EnemyManager.Parameter
+        var parameter = new Enemy.Parameter
             {
                 HitPoint = 10,
                 MoveSpeed = 1,
                 AttackPower = 1,
             };
 
-        var enemy = EnemyManager.CreateObject(enemyPrefab, parameter, spawnPoint);
+        var enemy = Enemy.CreateObject(enemyPrefab, parameter, spawnPoint);
         enemy.SetTargetTransform(_playerTransform);
+        _enemyList.Add(enemy);
     }
 }

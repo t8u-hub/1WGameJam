@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EnemyManager : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     private Transform _targetTransform;
 
@@ -17,9 +17,9 @@ public class EnemyManager : MonoBehaviour
         public int dropItemId;
     }
 
-    public static EnemyManager CreateObject(EnemyManager prefab, Parameter paramter, Transform parentTransform)
+    public static Enemy CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
     {
-        var enemyManager = GameObject.Instantiate<EnemyManager>(prefab, parentTransform);
+        var enemyManager = GameObject.Instantiate<Enemy>(prefab, parentTransform);
         enemyManager._parameter = paramter;
         enemyManager.transform.localPosition = Vector3.zero;
 
