@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -34,10 +34,10 @@ public class SceneManager : MonoSingleton<SceneManager>
         UIManager.Instance.FadeOut(() => complete = true);
         yield return waitComplete;
 
-        // ‘O‚ÌƒV[ƒ“‚ÌI—¹ˆ—
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†
         yield return currentSceneController.OnEndScene();
 
-        // ƒV[ƒ““ü‚ê‘Ö‚¦
+        // ã‚·ãƒ¼ãƒ³å…¥ã‚Œæ›¿ãˆ
         UnityEngine.SceneManagement.SceneManager.LoadScene(nextScene.ToString());
         _currentScene = nextScene;
 
@@ -46,7 +46,7 @@ public class SceneManager : MonoSingleton<SceneManager>
         var scenetView = GameObject.Find(nextScene.ToString()).GetComponent<SceneViewBase>();
         nextSceneController.SetView(scenetView);
 
-        // Ÿ‚ÌƒV[ƒ“‚Ì‰Šú‰»ˆ—
+        // æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–å‡¦ç†â˜€
         yield return nextSceneController.OnLoadScene();
 
         UIManager.Instance.FadeIn(() => complete = true);
@@ -76,18 +76,18 @@ public class SceneManager : MonoSingleton<SceneManager>
         var scenetView = sceneObject.GetComponent<SceneViewBase>();
         nextSceneController.SetView(scenetView);
 
-        // Ÿ‚ÌƒV[ƒ“‚Ì‰Šú‰»ˆ—
+        // æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–å‡¦ç†
         yield return nextSceneController.OnLoadScene();
     }
 
     /// <summary>
-    /// ƒV[ƒ“–¼‚©‚çƒV[ƒ“ƒRƒ“ƒgƒ[ƒ‰[‚ğæ“¾
+    /// ã‚·ãƒ¼ãƒ³åã‹ã‚‰ã‚·ãƒ¼ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å–å¾—
     /// </summary>
     public SceneData GetSceneController(string sceneName)
     {
         if (!Enum.TryParse(sceneName, out SceneDefine.Scene scene))
         {
-            Debug.LogError("ƒV[ƒ“ƒrƒ…[–¼‚ÆƒV[ƒ“ƒRƒ“ƒgƒ[ƒ‰[–¼‚ª‘Î‰‚µ‚Ä‚¢‚È‚¢");
+            Debug.LogError("ã‚·ãƒ¼ãƒ³ãƒ“ãƒ¥ãƒ¼åã¨ã‚·ãƒ¼ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼åãŒå¯¾å¿œã—ã¦ã„ãªã„");
             return null;
         }
 

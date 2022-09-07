@@ -6,8 +6,9 @@ public class ObjectAnimator : MonoBehaviour
 {
     private CanvasGroup _canvasGroup = null;
 
-    #region ƒtƒF[ƒh
+    #region ãƒ•ã‚§ãƒ¼ãƒ‰
 
+   
     public void PlayFade(float start, float end, Action onComplete, float dulation = .2f)
     {
         UIManager.Instance.StartCoroutine(PlayFadeInner(start, end, onComplete, dulation));
@@ -26,7 +27,7 @@ public class ObjectAnimator : MonoBehaviour
             }
         }
 
-        // Š—vŽžŠÔ‚ª0‚æ‚è‘å‚«‚¢Žž
+        // æ‰€è¦æ™‚é–“ãŒ0ã‚ˆã‚Šå¤§ãã„æ™‚
         if (dulation > 0f)
         {
             var time = 0f;

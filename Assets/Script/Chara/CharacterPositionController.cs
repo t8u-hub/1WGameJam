@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒLƒƒƒ‰ˆÊ’uƒRƒ“ƒgƒ[ƒ‰[@ƒLƒƒƒ‰ƒNƒ^[‚ÉƒAƒ^ƒbƒ`‚·‚é
+/// ã‚­ãƒ£ãƒ©ä½ç½®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€€ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«ã‚¢ã‚¿ãƒƒãƒã™ã‚‹
 /// </summary>
+/// 
 public class CharacterPositionController : MonoBehaviour
 {
     [SerializeField, Range(0f, 5.0f)]
@@ -46,7 +47,7 @@ public class CharacterPositionController : MonoBehaviour
 
         _acceleration = ZERO;
 
-        // ƒWƒƒƒ“ƒv‰Á‘¬“x
+        // ã‚¸ãƒ£ãƒ³ãƒ—åŠ é€Ÿåº¦
         if (_jump)
         {
             _jump = false;
@@ -54,7 +55,7 @@ public class CharacterPositionController : MonoBehaviour
             _acceleration += Vector3.up * _jumpPower;
         }
 
-        // d—Í‰Á‘¬“x‚Ì“K—p
+        // é‡åŠ›åŠ é€Ÿåº¦ã®é©ç”¨
         var isAppryGravity = !_isGround;
         if (isAppryGravity)
         {
@@ -62,27 +63,27 @@ public class CharacterPositionController : MonoBehaviour
         }
         else
         {
-            // d—Í‚ğ“K—p‚µ‚È‚¢‚Æ‚«‚Í‚»‚à‚»‚à‰º‚É—‚¿‚È‚¢‚æ‚¤‚É‚·‚é
+            // é‡åŠ›ã‚’é©ç”¨ã—ãªã„ã¨ãã¯ãã‚‚ãã‚‚ä¸‹ã«è½ã¡ãªã„ã‚ˆã†ã«ã™ã‚‹
             _speed.y = 0;
         }
 
-        // •¨—‰‰Z‚É‚æ‚éˆÚ“®
+        // ç‰©ç†æ¼”ç®—ã«ã‚ˆã‚‹ç§»å‹•
         _speed = _speed + _acceleration * Time.fixedDeltaTime;
         nextPosition = nextPosition + _speed * Time.fixedDeltaTime;
 
-        // ƒL[“ü—Í‚É‚æ‚é¶ˆÚ“®
+        // ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹å·¦ç§»å‹•
         if (_moveLeft)
         {
             nextPosition += LEFT * _velocity;
         }
 
-        // ƒL[“ü—Í‚É‚æ‚é‰EˆÚ“®
+        // ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹å³ç§»å‹•
         if (_moveRight)
         {
             nextPosition += RIGHT * _velocity;
         }
 
-        // ‰æ–ÊŠO‚Éo‚È‚¢‚æ‚¤‰¡‚ÌˆÚ“®§ŒÀ
+        // ç”»é¢å¤–ã«å‡ºãªã„ã‚ˆã†æ¨ªã®ç§»å‹•åˆ¶é™
         if (Mathf.Abs(nextPosition.x) > X_MOVE_RANGE)
         {
             nextPosition.x = (nextPosition.x > 0) ? X_MOVE_RANGE : -X_MOVE_RANGE;
@@ -93,7 +94,7 @@ public class CharacterPositionController : MonoBehaviour
 
     public void Update()
     {
-        // ƒWƒƒƒ“ƒv‰Á‘¬“x
+        // ã‚¸ãƒ£ãƒ³ãƒ—åŠ é€Ÿåº¦
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)))
         {
             _jump = true;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RigidBodyObject : MonoBehaviour
 {
+
     public enum RigidBodyType
     {
         LeftWall,

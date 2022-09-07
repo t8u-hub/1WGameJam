@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +28,7 @@ public class UIManager : MonoSingleton<UIManager>
     private ObjectAnimator _fadeAnimator;
 
     /// <summary>
-    /// w’è‚³‚ê‚½prefab‚ğƒLƒƒƒ“ƒoƒXˆÈ‰º‚É¶¬
+    /// æŒ‡å®šã•ã‚ŒãŸprefabã‚’ã‚­ãƒ£ãƒ³ãƒã‚¹ä»¥ä¸‹ã«ç”Ÿæˆâ˜€
     /// </summary>
     public GameObject CreateUi(GameObject prefab, UiType uiType = UiType.Normal)
     {
@@ -37,7 +37,7 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     /// <summary>
-    /// w’è‚µ‚½ƒLƒƒƒ“ƒoƒXˆÈ‰º‚ÌUI‚ğíœ
+    /// æŒ‡å®šã—ãŸã‚­ãƒ£ãƒ³ãƒã‚¹ä»¥ä¸‹ã®UIã‚’å‰Šé™¤
     /// </summary>
     public void ClearnUi(UiType uiType = UiType.Normal)
     {
@@ -49,7 +49,7 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     /// <summary>
-    /// ‚·‚×‚Ä‚ÌUI‚ğíœ
+    /// ã™ã¹ã¦ã®UIã‚’å‰Šé™¤
     /// </summary>
     public void CleanAllUi()
     {

@@ -7,3 +7,4 @@ public abstract class UiBase : MonoBehaviour
     public abstract void Initialize();
 
 }
+
