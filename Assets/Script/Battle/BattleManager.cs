@@ -17,10 +17,7 @@ public class BattleManager : MonoBehaviour
     private Transform _playerSpawnPoint;
 
     [SerializeField]
-    private Enemy[] _enemyPrefabArray;
-
-    [SerializeField]
-    private Transform[] _enemySpawnPointArray;
+    private EnemySpawner _enemySpawner;
 
     private Transform _playerTransform;
 
@@ -60,6 +57,8 @@ public class BattleManager : MonoBehaviour
             _instance = this;
             _battleWaveModel = new BattleWaveModel();
             _playGame = false;
+
+            _enemySpawner.CreateData();
         }
         else
         {
@@ -98,18 +97,12 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var spawnInfo in spawnInfoList)
         {
-            var enemyPrefab = _enemyPrefabArray[0];
-            var spawnPoint = _enemySpawnPointArray[spawnInfo.SpawnPoint];
-            var parameter = new Enemy.Parameter
+            for (int i = 0; i < spawnInfo.AppearNum; i++)
             {
-                HitPoint = 10,
-                MoveSpeed = 1,
-                AttackPower = 1,
-            };
-
-            var enemy = Enemy.CreateObject(enemyPrefab, parameter, spawnPoint);
-            enemy.SetTargetTransform(_playerTransform);
-            _enemyList.Add(enemy);
+                var enemy = _enemySpawner.SpawnEnemy(_battleWaveModel.CurrentWave, spawnInfo);
+                enemy.SetTargetTransform(_playerTransform);
+                _enemyList.Add(enemy);
+            }
         }
     }
 
