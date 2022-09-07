@@ -38,7 +38,7 @@ public class CsvReader
         // Dictionary格納用に成形
         // 1行目はカラム名なので2行目から読む
         _csvData = new List<Dictionary<string, int>>();
-        for (var i = 2; i < tempCsvData.Count; i++)
+        for (var i = 1; i < tempCsvData.Count; i++)
         {
             // 一列ぶんのデータの辞書作成
             var dict = tempCsvData[i].Select((data, index) =>
