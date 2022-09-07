@@ -14,16 +14,19 @@ public class CharacterPositionController : MonoBehaviour
     [SerializeField, Range(10000f, 30000.0f)]
     private float _jumpPower = 1f;
 
+    [SerializeField]
+    private Transform _imageTransform;
+
     private static readonly Vector3 LEFT = Vector3.left;
     private static readonly Vector3 RIGHT = Vector3.right;
     private static readonly Vector3 ZERO = Vector3.zero;
     private static readonly Vector3 UP = Vector3.up;
 
-    private static float X_MOVE_RANGE = 400;
+    public static float X_MOVE_RANGE = 400;
 
     private float _groundHeight;
 
-    private static readonly string GROUND = "Ground";
+    public static readonly string GROUND = "Ground";
     private bool _isGround = false;
 
     private int _maxJumpNum = 2;
@@ -33,7 +36,6 @@ public class CharacterPositionController : MonoBehaviour
     private Vector3 _previousPosition;
     private Vector3 _acceleration = Vector3.zero;
     private Vector3 _speed = Vector3.zero;
-
 
     bool _moveRight = false;
     bool _moveLeft = false;
@@ -75,12 +77,14 @@ public class CharacterPositionController : MonoBehaviour
         if (_moveLeft)
         {
             nextPosition += LEFT * _velocity;
+            _imageTransform.transform.localScale = new Vector3(1, 1, 1);
         }
 
         // キー入力による右移動
         if (_moveRight)
         {
             nextPosition += RIGHT * _velocity;
+            _imageTransform.transform.localScale = new Vector3(-1, 1, 1);
         }
 
         // 画面外に出ないよう横の移動制限

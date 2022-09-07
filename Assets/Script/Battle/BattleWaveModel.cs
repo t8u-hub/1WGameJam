@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// エネミーのリスポーン情報
+/// </summary>
 public class EnemySpawnInfo
 {
     public int EnemyId { get; }
@@ -17,9 +20,14 @@ public class EnemySpawnInfo
     }
 }
 
-
+/// <summary>
+/// バトルのWave管理用クラス
+/// </summary>
 public class BattleWaveModel
 {
+    private int _currentWave;
+    public int CurrentWave => _currentWave;
+
     private int _totalWaveCount;
 
     private CsvReader _waveData;
@@ -31,6 +39,8 @@ public class BattleWaveModel
         // Wave一覧とどんな条件でWaveが終わるか情報
         _waveData = new CsvReader();
         _waveData.Create(CsvDefine.WaveData.PATH);
+
+        var waveInfo = 
         _totalWaveCount = _waveData.CsvData.Count;
 
         // Waveごとに出現させる敵の情報
@@ -56,16 +66,21 @@ public class BattleWaveModel
             }
         }
 
-        // 実装うまくいってるか確認用
+    }
 
-        for(var i = 1; i <= _totalWaveCount; i++)
-        {
-            Debug.Log($"wave{i} に出す敵");
-            var data = _waveEnemyDict[i];
-            foreach(var spawnData in data)
-            {
-                Debug.Log($"id{spawnData.EnemyId}　数{spawnData.AppearNum}　場所{spawnData.SpawnPoint}");
-            }
-        }
+
+    public void Initialize()
+    {
+        _currentWave = 1;
+
+        // 1WAVE目のエネミーをスポーン
+        BattleManager.Instance.SpawnEnemy(_waveEnemyDict[_currentWave]);
+    }
+
+    public void UpdateWaveModel()
+    {
+        // Wave終了判定
+
+        // Wave終了条件を満たしていたら次のエネミーをスポーン
     }
 }

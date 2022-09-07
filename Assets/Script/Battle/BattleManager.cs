@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class BattleManager : MonoSingleton<BattleManager>
+public class BattleManager : MonoBehaviour
 {
 
     protected static BattleManager _instance = null;
@@ -17,10 +17,7 @@ public class BattleManager : MonoSingleton<BattleManager>
     private Transform _playerSpawnPoint;
 
     [SerializeField]
-    private Enemy[] _enemyPrefabArray;
-
-    [SerializeField]
-    private Transform[] _enemySpawnPointArray;
+    private EnemySpawner _enemySpawner;
 
     private Transform _playerTransform;
 
@@ -49,11 +46,19 @@ public class BattleManager : MonoSingleton<BattleManager>
     /// </summary>
     private List<Enemy> _enemyList = new List<Enemy>();
 
+    private BattleWaveModel _battleWaveModel;
+
+    bool _playGame = false;
+
     void Awake()
     {
         if (_instance == null)
         {
             _instance = this;
+            _battleWaveModel = new BattleWaveModel();
+            _playGame = false;
+
+            _enemySpawner.CreateData();
         }
         else
         {
@@ -61,28 +66,44 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
     }
 
+    private void Update()
+    {
+        if (!_playGame)
+        {
+            return;
+        }
+
+        _battleWaveModel.UpdateWaveModel();
+    }
+
     public void GameStart()
     {
+        // プレイヤー生成
         var playerObj = GameObject.Instantiate(_playerPrefab, _playerSpawnPoint);
         playerObj.transform.localPosition = Vector3.zero;
         _playerTransform = playerObj.transform;
 
-        var enemySpawnManager = new BattleWaveModel();
+        // ウェーブ初期化
+        _battleWaveModel.Initialize();
+
+        _playGame = true;
     }
 
-    public void SpawnEnemy()
+    /// <summary>
+    /// エネミーをスポーンさせる
+    /// </summary>
+    /// <param name="spawnInfoList"></param>
+    public void SpawnEnemy(List<EnemySpawnInfo> spawnInfoList)
     {
-        var enemyPrefab = _enemyPrefabArray[0];
-        var spawnPoint = _enemySpawnPointArray[0];
-        var parameter = new Enemy.Parameter
+        foreach (var spawnInfo in spawnInfoList)
+        {
+            for (int i = 0; i < spawnInfo.AppearNum; i++)
             {
-                HitPoint = 10,
-                MoveSpeed = 1,
-                AttackPower = 1,
-            };
-
-        var enemy = Enemy.CreateObject(enemyPrefab, parameter, spawnPoint);
-        enemy.SetTargetTransform(_playerTransform);
-        _enemyList.Add(enemy);
+                var enemy = _enemySpawner.SpawnEnemy(_battleWaveModel.CurrentWave, spawnInfo);
+                enemy.SetTargetTransform(_playerTransform);
+                _enemyList.Add(enemy);
+            }
+        }
     }
+
 }
