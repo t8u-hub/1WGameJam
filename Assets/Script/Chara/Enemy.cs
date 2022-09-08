@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
 
     private Parameter _parameter;
 
+    private int _hp;
+
     /// <summary>
     /// 現在のモーションを続ける時間
     /// </summary>
@@ -46,6 +48,7 @@ public class Enemy : MonoBehaviour
         var enemyManager = GameObject.Instantiate<Enemy>(prefab, parentTransform);
         enemyManager._parameter = paramter;
         enemyManager.transform.localPosition = Vector3.zero;
+        enemyManager._hp = paramter.HitPoint;
 
         return enemyManager;
     }
@@ -142,10 +145,10 @@ public class Enemy : MonoBehaviour
         }
 
         // 画面外に出ないよう横の移動制限
-        if (Mathf.Abs(nextPosition.x) > CharacterPositionController.X_MOVE_RANGE)
+        if (Mathf.Abs(nextPosition.x) > PlayerPositionController.X_MOVE_RANGE)
         {
             nextPosition.x = (nextPosition.x > 0) ?
-                CharacterPositionController.X_MOVE_RANGE : -CharacterPositionController.X_MOVE_RANGE;
+                PlayerPositionController.X_MOVE_RANGE : -PlayerPositionController.X_MOVE_RANGE;
         }
 
         transform.position = nextPosition;
@@ -154,12 +157,23 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var tag = collision.gameObject.tag;
-        if (tag == CharacterPositionController.GROUND)
+        if (tag == PlayerPositionController.GROUND)
         {
             _isGround = true;
             var pos = this.transform.position;
             pos.y = collision.transform.position.y;
             this.transform.position = pos;
+        }
+    }
+
+    public void OnDamage(int hitCount, int amount)
+    {
+        _hp -= amount * hitCount;
+
+        if (_hp <= 0)
+        {
+            BattleManager.Instance.OnEnemyKilled(this);
+            Destroy(this.gameObject);
         }
     }
 }

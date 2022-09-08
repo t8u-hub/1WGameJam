@@ -106,4 +106,11 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    public void OnEnemyKilled(Enemy enemy)
+    {
+        if (_enemyList.Contains(enemy))
+        {
+            _enemyList.Remove(enemy);
+        }
+    }
 }
