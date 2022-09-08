@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7993339209678361302}
   - component: {fileID: 1107806057862117657}
   - component: {fileID: 3861043259968664294}
+  - component: {fileID: 8670205825219414335}
   m_Layer: 5
   m_Name: PlayerAttack
   m_TagString: Untagged
@@ -51,6 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: 3861043259968664294}
+  _attackBall: {fileID: 3149214952535992185, guid: 28f8e557180c77b4199f9b9e7ad00c7e,
+    type: 3}
 --- !u!61 &3861043259968664294
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -77,6 +80,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 40, y: 60}
   m_EdgeRadius: 0
+--- !u!223 &8670205825219414335
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5638080239089889873}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: -1
+  m_TargetDisplay: 0
 --- !u!1 &8595752559589393457
 GameObject:
   m_ObjectHideFlags: 0

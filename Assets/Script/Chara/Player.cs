@@ -197,13 +197,27 @@ public class Player : MonoBehaviour
             var weapon = _weaponList.First(weapon => weapon.Type == 2);
 
             _attackMotionTime = .5f;
-            _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
-            _playerPositionController.DoHorizontalMoveAttack();
             SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
+            _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
+            _playerPositionController.DoHorizontalMoveAttack(() =>
+            {
+                if (_attackMotionTime > 0)
+                {
+                    _attackMotionTime = 0f;
+                    SetAllActionRestrictionState(false);
+                    _playerAttack.FinishAttack();
+                }
+            });
         }
         else if (_actionEnableStateDict[ActionType.MiddleDistanceAttack].CanExec && Input.GetKeyDown(KeyCode.C))
         {
+            // 遠距離投擲攻撃
+            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
+            var weapon = _weaponList.First(weapon => weapon.Type == 3);
 
+            _attackMotionTime = .1f;
+            _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent);
+            SetActionEnableState(CsvDefine.ActionData.AttackType.MiddleDistance, ActionType.MiddleDistanceAttack);
         }
         else if (_actionEnableStateDict[ActionType.LongRangeAttack].CanExec && Input.GetKeyDown(KeyCode.V))
         {
@@ -213,18 +227,27 @@ public class Player : MonoBehaviour
 
             _attackMotionTime = .1f;
             _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage);
-            SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);;
+            SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);
 
         }
         else if (_actionEnableStateDict[ActionType.VerticalMoveAttack].CanExec && Input.GetKeyDown(KeyCode.DownArrow))
         {
-            // 降下攻撃
-            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-            var weapon = _weaponList.First(weapon => weapon.Type == 5);
+            // 降下攻撃できるのは滞空中だけ
+            if (!_playerPositionController.IsGround)
+            {
+                // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
+                var weapon = _weaponList.First(weapon => weapon.Type == 5);
 
-            _attackMotionTime = .1f;
-            _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage);
-            SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
+                SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
+                // 100秒降下し続けることはないと思うので...という最悪なコード
+                _attackMotionTime = 100f;
+                _playerPositionController.DoVerticalMoveAttack(() =>
+                {
+                    _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage);
+                    // 着地してから固定秒数つづく
+                    _attackMotionTime = 0.1f;
+                });
+            }
         }
 
         // 通常モーション
@@ -232,6 +255,13 @@ public class Player : MonoBehaviour
         var moveLeft = _actionEnableStateDict[ActionType.Move].CanExec && Input.GetKey(KeyCode.LeftArrow);
         var jump = _actionEnableStateDict[ActionType.Jump].CanExec && 
                         (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space));
+        if (moveRight || moveLeft || jump)
+        {
+            // どれか一つでも入力が許容されてたら前の攻撃モーションは終わり（リキャストタイム以外の制約は消える）
+            _attackMotionTime = 0f;
+            SetAllActionRestrictionState(false);
+            _playerAttack.FinishAttack();
+        }
         _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
     }
 }
