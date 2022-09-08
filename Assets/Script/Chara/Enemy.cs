@@ -6,6 +6,12 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Transform _imageTransform;
 
+    [SerializeField]
+    private DamageText _damageText;
+
+    [SerializeField]
+    private Animation _destroyAnimation;
+
     private static readonly Vector3 LEFT = Vector3.left;
     private static readonly Vector3 RIGHT = Vector3.right;
     private static readonly Vector3 ZERO = Vector3.zero;
@@ -108,6 +114,11 @@ public class Enemy : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (_hp <= 0)
+        {
+            return;
+        }
+
         _previousPosition = transform.position;
         var nextPosition = _previousPosition;
 
@@ -134,14 +145,14 @@ public class Enemy : MonoBehaviour
         if (_moveLeft)
         {
             nextPosition += LEFT * _parameter.MoveSpeed;
-            _imageTransform.transform.localScale = new Vector3(-1, 1, 1);
+            _imageTransform.transform.localScale = new Vector3(1, 1, 1);
         }
 
         // 右移動
         if (_moveRight)
         {
             nextPosition += RIGHT * _parameter.MoveSpeed;
-            _imageTransform.transform.localScale = new Vector3(1, 1, 1);
+            _imageTransform.transform.localScale = new Vector3(-1, 1, 1);
         }
 
         // 画面外に出ないよう横の移動制限
@@ -169,11 +180,21 @@ public class Enemy : MonoBehaviour
     public void OnDamage(int hitCount, int amount)
     {
         _hp -= amount * hitCount;
+        for (int i = 0; i < hitCount; i++)
+        {
+            var damageText = GameObject.Instantiate<DamageText>(_damageText, transform);
+            damageText.PlayDamage(amount);
+        }
 
         if (_hp <= 0)
         {
-            BattleManager.Instance.OnEnemyKilled(this);
-            Destroy(this.gameObject);
+            _destroyAnimation.Play();
         }
+    }
+    
+    public void OnDeadAnimationEnd()
+    {
+        BattleManager.Instance.OnEnemyKilled(this);
+        Destroy(this.gameObject);
     }
 }
