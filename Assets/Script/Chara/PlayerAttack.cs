@@ -79,7 +79,7 @@ public class PlayerAttack : MonoBehaviour
         _hitCount = hit;
 
         // 持続時間
-        _attackLastTime = .1f;
+        _attackLastTime = .5f;
     }
 
     /// <summary>

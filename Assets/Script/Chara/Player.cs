@@ -196,8 +196,9 @@ public class Player : MonoBehaviour
             // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
             var weapon = _weaponList.First(weapon => weapon.Type == 2);
 
-            _attackMotionTime = .1f;
+            _attackMotionTime = .5f;
             _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
+            _playerPositionController.DoHorizontalMoveAttack();
             SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
         }
         else if (_actionEnableStateDict[ActionType.MiddleDistanceAttack].CanExec && Input.GetKeyDown(KeyCode.C))

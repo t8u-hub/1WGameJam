@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7302028959007477197}
   - component: {fileID: 7302028959007477198}
   - component: {fileID: 7321320869451458100}
+  - component: {fileID: 5366404594465289169}
+  - component: {fileID: 7128440774268374839}
   m_Layer: 5
   m_Name: Enemy
   m_TagString: Enemy
@@ -28,7 +30,7 @@ RectTransform:
   m_GameObject: {fileID: 7302028959007477233}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7302028960358875232}
@@ -100,6 +102,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageTransform: {fileID: 7302028960358875232}
+  _damageText: {fileID: 2573675508876700816, guid: 783b92428e0a491409a3737be1def3dc,
+    type: 3}
+  _destroyAnimation: {fileID: 5366404594465289169}
+--- !u!111 &5366404594465289169
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7302028959007477233}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 21815e241bc989d4ab0e4e00bbcce8ff, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 21815e241bc989d4ab0e4e00bbcce8ff, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!225 &7128440774268374839
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7302028959007477233}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7302028960358875239
 GameObject:
   m_ObjectHideFlags: 0
