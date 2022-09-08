@@ -6,7 +6,7 @@ using UnityEngine;
 /// キャラ位置コントローラー　キャラクターにアタッチする
 /// </summary>
 /// 
-public class CharacterPositionController : MonoBehaviour
+public class PlayerPositionController : MonoBehaviour
 {
     [SerializeField, Range(0f, 5.0f)]
     private float _velocity = 1f;
@@ -53,8 +53,12 @@ public class CharacterPositionController : MonoBehaviour
         if (_jump)
         {
             _jump = false;
-            _isGround = false;
-            _acceleration += Vector3.up * _jumpPower;
+
+            if (_isGround)
+            {
+                _isGround = false;
+                _acceleration += Vector3.up * _jumpPower;
+            }
         }
 
         // 重力加速度の適用
@@ -96,19 +100,30 @@ public class CharacterPositionController : MonoBehaviour
         transform.position = nextPosition;
     }
 
-    public void Update()
+    public void SetPlayerMove(bool moveRight, bool moveLeft, bool jump)
     {
-        // ジャンプ加速度
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)))
-        {
-            _jump = true;
-        }
+        _moveLeft = moveLeft;
+        _moveRight = moveRight;
 
-        _moveLeft = Input.GetKey(KeyCode.LeftArrow);
-        _moveRight = Input.GetKey(KeyCode.RightArrow);
+        if (!_jump)
+        {
+            _jump = jump;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var tag = collision.gameObject.tag;
+        if (tag == GROUND)
+        {
+            _isGround = true;
+            var pos = this.transform.position;
+            pos.y = collision.transform.position.y;
+            this.transform.position = pos;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
         var tag = collision.gameObject.tag;
         if (tag == GROUND)
