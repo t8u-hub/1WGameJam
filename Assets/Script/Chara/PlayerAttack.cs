@@ -7,6 +7,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     private BoxCollider2D _boxCollider;
 
+    [SerializeField]
+    private AttackBall _attackBall;
+
     /// <summary>
     /// 攻撃が継続する時間
     /// </summary>
@@ -85,9 +88,11 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// 遠距離攻撃
     /// </summary>
-    public void AttackMiddleDistance(int hit, int damage)
+    public void AttackMiddleDistance(int hit, int damage, Transform parent)
     {
-
+        var ball = GameObject.Instantiate<AttackBall>(_attackBall, parent);
+        ball.transform.position = transform.position + new Vector3(0, 18, 0);
+        ball.Throw(hit, damage, transform.parent.localScale.x < 0);
     }
 
     /// <summary>
@@ -137,5 +142,10 @@ public class PlayerAttack : MonoBehaviour
             var enemy = collision.transform.GetComponent<Enemy>();
             enemy?.OnDamage(_hitCount, _damageAmount);
         }
+    }
+
+    public void FinishAttack()
+    {
+        _attackLastTime = 0;
     }
 }
