@@ -22,8 +22,6 @@ public class PlayerDamageUI : MonoBehaviour
             return;
         }
 
-        Debug.Log(this.gameObject.name);
-
         var curDamage = BattleManager.Instance.TotalDamage;
         bool animation = false;
 
