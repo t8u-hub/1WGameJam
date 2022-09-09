@@ -32,9 +32,9 @@ public class BattleManager : MonoBehaviour
     public float CurrentGauge { get; private set; }
 
     /// <summary>
-    /// 現在のプレイヤーHP
+    /// 現在のプレイヤー累積ダメージ
     /// </summary>
-    public int CurrentHp { get; private set; }
+    public float TotalDamage { get; private set; }
 
     /// <summary>
     /// 現在のスコア
@@ -138,5 +138,10 @@ public class BattleManager : MonoBehaviour
     public void GaugeUp(int damage)
     {
         CurrentGauge += (float)damage / ( _battleWaveModel.CurrentWaveData.GaugeCoef * 1000f); // 値がめちゃ大きくなりそうなのでスケールかけとく
+    }
+
+    public void EnemyAttack(float damage)
+    {
+        TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
     }
 }

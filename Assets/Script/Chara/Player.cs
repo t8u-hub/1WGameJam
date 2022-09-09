@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoSingleton<Player>
 {
     #region Class, enum
 
@@ -127,6 +127,14 @@ public class Player : MonoBehaviour
     /// 今の攻撃モーションの残り時間
     /// </summary>
     private float _attackMotionTime = 0f;
+
+    public bool InAttacking
+    {
+        get
+        {
+            return _attackMotionTime > 0f;
+        }
+    }
 
     private void Awake()
     {

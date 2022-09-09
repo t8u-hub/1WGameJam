@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Animation _destroyAnimation;
 
+    [SerializeField]
+    private EnemyAttackArea _attackArea;
+
     private static readonly Vector3 LEFT = Vector3.left;
     private static readonly Vector3 RIGHT = Vector3.right;
     private static readonly Vector3 ZERO = Vector3.zero;
@@ -38,7 +41,6 @@ public class Enemy : MonoBehaviour
     bool _moveRight = false;
     bool _moveLeft = false;
     bool _chase = false;
-    bool _canAttack = false;
 
     // スポーンした直後だけ宙に浮いている想定
     bool _isGround = false;
@@ -114,7 +116,12 @@ public class Enemy : MonoBehaviour
                 _moveLeft = !isTargetRight;
             }
 
-            return;
+            // 被ダメ中or攻撃中　あるいはプレイヤーが攻撃できない領域にいるならこのあとは特になにもしない
+            // 逆に、被ダメor攻撃中以外でプレイヤーが攻撃できる領域にいる場合は強制で次の状態抽選を走らせる
+            if (!_isGround || _state == State.Damaging || _state == State.Attack || !_attackArea.IsInArea)
+            {
+                return;
+            }
         }
 
         _remainMoveTime = 1f;
@@ -125,11 +132,18 @@ public class Enemy : MonoBehaviour
 
         // 次の状態を抽選
 
-        if (_canAttack)
+        if (_attackArea.IsInArea && _isGround)
         {
-
-            // 攻撃する
-            Debug.Log("こうげき");
+            // デフォ敵は着地していないと攻撃できない
+            if (!Player.Instance.InAttacking)
+            {
+                _state = State.Attack;
+                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
+            }
+            else
+            {
+                _state = State.Default;
+            }
             return;
         }
 
