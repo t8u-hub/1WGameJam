@@ -45,6 +45,8 @@ public class PlayerPositionController : MonoBehaviour
     private bool _isGround = false;
     public bool IsGround => _isGround;
 
+    public bool IsMove => _moveLeft || _moveRight;
+
     /// <summary> 攻撃の移動時間（横移動攻撃で使用） </summary>
     private float _attackMoveTime = 0f;
 

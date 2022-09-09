@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class Player : MonoSingleton<Player>
 {
+    protected Vector3 IMG_DEFAULT = new Vector3(1, 1, 1);
+    protected Vector3 IMG_FLIP = new Vector3(-1, 1, 1);
+
     #region Class, enum
 
     class Weapon
@@ -98,6 +101,15 @@ public class Player : MonoSingleton<Player>
         VerticalMoveAttack,
     }
 
+    enum ActionSpriteState
+    {
+        Stop,
+        Move,
+        Jump,
+        Attack,
+        Damage,
+    }
+
     #endregion
 
     private Dictionary<ActionType, ActionEnableState> _actionEnableStateDict = new Dictionary<ActionType, ActionEnableState>()
@@ -145,10 +157,14 @@ public class Player : MonoSingleton<Player>
     /// </summary>
     private float _attackMotionTime = 0f;
 
+    private ActionSpriteState _spriteState = ActionSpriteState.Stop;
+
     /// <summary>
     /// 被ダメ時などの無敵時間
     /// </summary>
     private float _noDamageTime = 0f;
+
+    private int _charaLevel = 1;
 
     public bool InAttacking
     {
@@ -240,7 +256,7 @@ public class Player : MonoSingleton<Player>
                     SetAllActionRestrictionState(false);
 
                     // 画像を被弾状態から戻す
-                    _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal);
+                    ResetSprite();
                 }
                 else
                 {
@@ -261,7 +277,7 @@ public class Player : MonoSingleton<Player>
             if (_attackMotionTime <= 0f)
             {
                 // 画像を攻撃状態から戻す
-                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal);
+                ResetSprite();
 
                 // すべてのモーションの他アニメーションによる制約を削除
                 SetAllActionRestrictionState(false);
@@ -277,7 +293,9 @@ public class Player : MonoSingleton<Player>
             if (weapon != null) 
             {
                 // 画像を攻撃状態へ
-                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack, _charaLevel, 1);
+                _image.transform.localScale = IMG_DEFAULT;
+                _spriteState = ActionSpriteState.Attack;
 
                 var info = _attackSetting.GetNormalAttackInfo();
                 _attackMotionTime = info.RigidityTime;
@@ -292,7 +310,9 @@ public class Player : MonoSingleton<Player>
             if (weapon != null)
             {
                 // 画像を攻撃状態へ
-                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack, _charaLevel, 2);
+                _spriteState = ActionSpriteState.Attack;
+                _image.transform.localScale = IMG_DEFAULT;
 
                 var info = _attackSetting.GetHorizontalMoveAttackInfo();
                 _attackMotionTime = info.MaxLastTime ;
@@ -303,7 +323,7 @@ public class Player : MonoSingleton<Player>
                     if (_attackMotionTime > 0)
                     {
                         // 画像を通常状態へ
-                        _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal);
+                        ResetSprite();
 
                         _attackMotionTime = 0f;
                         SetAllActionRestrictionState(false);
@@ -319,7 +339,9 @@ public class Player : MonoSingleton<Player>
             if (weapon != null)
             {
                 // 画像を攻撃状態へ
-                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack, _charaLevel, 3);
+                _image.transform.localScale = IMG_DEFAULT;
+                _spriteState = ActionSpriteState.Attack;
 
                 var info = _attackSetting.GetMiddleDistanceAttackInfo();
                 _attackMotionTime = info.RigidityTime;
@@ -335,7 +357,9 @@ public class Player : MonoSingleton<Player>
             if (weapon != null)
             {
                 // 画像を攻撃状態へ
-                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack, _charaLevel, 4);
+                _image.transform.localScale = IMG_FLIP;
+                _spriteState = ActionSpriteState.Attack;
 
                 _attackMotionTime = info.RigidityTime;
                 _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage, info.HitArea);
@@ -353,8 +377,9 @@ public class Player : MonoSingleton<Player>
                 if (weapon != null)
                 {
                     // 画像を攻撃状態へ
-                    _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
-
+                    _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack, _charaLevel, 5);
+                    _image.transform.localScale = IMG_DEFAULT;
+                    _spriteState = ActionSpriteState.Attack;
 
                     SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
                     // 100秒降下し続けることはないと思うので...という最悪なコード
@@ -382,7 +407,7 @@ public class Player : MonoSingleton<Player>
             _playerAttack.FinishAttack();
 
             // 画像を通常状態へ
-            _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal);
+            ResetSprite();
         }
         _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
     }
@@ -420,7 +445,9 @@ public class Player : MonoSingleton<Player>
         SetAllActionRestrictionState(true);
 
         // 画像を被弾状態に
-        _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Damaged);
+        _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Damaged, _charaLevel);
+        _image.transform.localScale = IMG_FLIP;
+        _spriteState = ActionSpriteState.Damage;
     }
 
     private void Debug_ReleaseItem()
@@ -438,6 +465,38 @@ public class Player : MonoSingleton<Player>
             _actionEnableStateDict[ActionType.MiddleDistanceAttack].ReleaseAction();
             _actionEnableStateDict[ActionType.LongRangeAttack].ReleaseAction();
             _actionEnableStateDict[ActionType.VerticalMoveAttack].ReleaseAction();
+        }
+    }
+
+    private void ResetSprite()
+    {
+        if (!_playerPositionController.IsGround)
+        {
+            if (_spriteState != ActionSpriteState.Jump)
+            {
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Jump, _charaLevel);
+                _image.transform.localScale = IMG_FLIP;
+                _spriteState = ActionSpriteState.Jump;
+            }
+            return;
+        }
+
+        if (_playerPositionController.IsMove)
+        {
+            if (_spriteState != ActionSpriteState.Move)
+            {
+                _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Run, _charaLevel);
+                _image.transform.localScale = IMG_FLIP;
+                _spriteState = ActionSpriteState.Move;
+            }
+            return;
+        }
+
+        if (_spriteState != ActionSpriteState.Stop)
+        {
+            _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal, _charaLevel);
+            _image.transform.localScale = IMG_FLIP;
+            _spriteState = ActionSpriteState.Stop;
         }
     }
 }
