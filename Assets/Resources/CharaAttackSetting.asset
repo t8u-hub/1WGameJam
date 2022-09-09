@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackInfoArray:
   - NormalAttack:
-      HitArea: {x: 40, y: 60}
+      HitArea: {x: 100, y: 90}
       RigidityTime: 0.3
     HorizontalMoveAttack:
       HitArea: {x: 40, y: 60}
-      MaxLastTime: 0.5
+      MaxLastTime: 0.3
       MoveSpeed: 600
     MiddleDistanceAttack:
       HitArea: {x: 0, y: 60, z: 0}
@@ -32,5 +32,5 @@ MonoBehaviour:
       HitArea: {x: 240, y: 60}
       RigidityTime: 0.2
       MoveSpeed: 400
-  _rigidityTime: 0.4
-  _noDamageTime: 1.4
+  _rigidityTime: 0.7
+  _noDamageTime: 1.7

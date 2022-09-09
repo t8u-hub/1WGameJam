@@ -57,5 +57,10 @@ public class PlayerDamageUI : MonoBehaviour
         {
             _animation.Play();
         }
+        else if (!animation && _animation.isPlaying)
+        {
+            _animation.Stop();
+            _animation.Rewind();
+        }
     }
 }

@@ -47,6 +47,15 @@ MonoBehaviour:
   _enemyPrefabRoot: {fileID: 0}
   _enemyPrefabArray:
   - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
   _enemySpawnPointArray:
   - {fileID: 0}
   - {fileID: 0}

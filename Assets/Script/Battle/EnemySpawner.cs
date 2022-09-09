@@ -94,7 +94,9 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // スポーン処理
-        var enemyPrefab = _enemyPrefabArray[0]; // TODO: Idに沿った敵を選ぶ
+        var type = masterEnemyData.Type;
+        var index = (masterEnemyData.DropItemId == 0)? type - 1 : type + 4;
+        var enemyPrefab = _enemyPrefabArray[index]; // TODO: Idに沿った敵を選ぶ
         var spawnPoint = _enemySpawnPointArray[info.SpawnPoint - 1]; // csvデータは1始まりなのでIndexは-１する
         var parameter = new Enemy.Parameter
         {

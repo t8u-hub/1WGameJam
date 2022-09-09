@@ -217,6 +217,12 @@ public class Player : MonoSingleton<Player>
 
     void Update()
     {
+#if UNITY_EDITOR
+
+        Debug_ReleaseItem();
+
+#endif
+
         if (_weaponList == null || _attackList == null)
         {
             return;
@@ -415,5 +421,23 @@ public class Player : MonoSingleton<Player>
 
         // 画像を被弾状態に
         _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Damaged);
+    }
+
+    private void Debug_ReleaseItem()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("デバッグ用機能　全モーション解放");
+            _equipWeaponDict[CsvDefine.ActionData.AttackType.HorizontalMove] = _weaponList.Find(weapon => weapon.Id == 201);
+            _equipWeaponDict[CsvDefine.ActionData.AttackType.MiddleDistance] = _weaponList.Find(weapon => weapon.Id == 301);
+            _equipWeaponDict[CsvDefine.ActionData.AttackType.LongRange] = _weaponList.Find(weapon => weapon.Id == 401);
+            _equipWeaponDict[CsvDefine.ActionData.AttackType.VerticalMove] = _weaponList.Find(weapon => weapon.Id == 501);
+
+            // 移動、ジャンプ、通常攻撃は最初からできる
+            _actionEnableStateDict[ActionType.HorizontalMoveAttack].ReleaseAction();
+            _actionEnableStateDict[ActionType.MiddleDistanceAttack].ReleaseAction();
+            _actionEnableStateDict[ActionType.LongRangeAttack].ReleaseAction();
+            _actionEnableStateDict[ActionType.VerticalMoveAttack].ReleaseAction();
+        }
     }
 }
