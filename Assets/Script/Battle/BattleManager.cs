@@ -46,6 +46,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public int CurrentEnemyCount { get; private set; }
 
+    public float PlayerAttackCoef => _battleWaveModel.CurrentWaveData.AttacCoef;
+
     /// <summary>
     /// 表示中の敵一覧
     /// </summary>
@@ -57,6 +59,8 @@ public class BattleManager : MonoBehaviour
     bool _playGame = false;
 
     private GameUi _gameUi;
+
+    private float _noDamageTimer;
 
     void Awake()
     {
@@ -79,6 +83,14 @@ public class BattleManager : MonoBehaviour
         if (!_playGame)
         {
             return;
+        }
+
+        _noDamageTimer += Time.deltaTime;
+        if(_noDamageTimer > 3f && TotalDamage > 0)
+        {
+            // 仮　1秒で２回復する想定
+            var recoverAmount = 2 * Time.deltaTime;
+            TotalDamage = Mathf.Max(0, TotalDamage - recoverAmount);
         }
 
         _battleWaveModel.UpdateWaveModel();
@@ -150,5 +162,7 @@ public class BattleManager : MonoBehaviour
         _player.OnDamage();
         TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
         Debug.Log($"総ダメージ{TotalDamage}");
+
+        _noDamageTimer = 0;
     }
 }

@@ -158,10 +158,11 @@ public class PlayerAttack : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy" )
+        if (collision.tag == "Enemy")
         {
             var enemy = collision.transform.GetComponent<Enemy>();
-            enemy?.OnDamage(_hitCount, _damageAmount);
+            var damage = (int)(BattleManager.Instance.PlayerAttackCoef *(float)_damageAmount);
+            enemy?.OnDamage(_hitCount, damage);
         }
     }
 
