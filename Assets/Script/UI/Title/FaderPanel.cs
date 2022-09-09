@@ -28,8 +28,6 @@ public class FaderPanel : UiBase
         float deltaB = (targetColor.b - originalColor.b) / loopTime;
         float deltaA = (targetColor.a - originalColor.a) / loopTime;
 
-        // Debug.Log(new Vector4(targetColor.a, originalColor.a, loopTime, deltaA));
-
         for (int i = 0; i < loopTime - 1; i++)
         {
             //  _faderPanel の色を更新する

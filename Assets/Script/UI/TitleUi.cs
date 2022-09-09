@@ -16,6 +16,12 @@ public class TitleUi : UiBase
     [SerializeField]
     private GameObject _bamboos;
 
+    [SerializeField]
+    private GameObject _moon;
+
+    [SerializeField]
+    private GameObject _background;
+
     // スペースキーを押され続けている時間(sec)
     private float _timePressed = 0.0f;
 
@@ -63,7 +69,11 @@ public class TitleUi : UiBase
         foreach (BambooImage _bambooImage in _bambooImages)
         {
             _bambooImage.StopWaving();
+            _bambooImage.gameObject.SetActive(false);
         }
+
+        _moon.SetActive(false);
+        _background.SetActive(false);
     }
 }
 
