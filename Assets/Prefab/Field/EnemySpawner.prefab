@@ -48,14 +48,14 @@ MonoBehaviour:
   _enemyPrefabArray:
   - {fileID: 7321320869451458100, guid: 9fb1635926eccee42af69f2722238cd7, type: 3}
   - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 8004224543787032895, guid: 884f0a7b4db1ea146ba9b124b25e177e, type: 3}
   - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
-  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
-  - {fileID: 7321320869451458100, guid: cab19f2c4cc60e844a47e0c327a1772d, type: 3}
+  - {fileID: 6940028965011416869, guid: c3c714746df5df74896424e4c89621a0, type: 3}
   - {fileID: 7321320869451458100, guid: 5c117e174f7c65d44b608e95b013ed9a, type: 3}
   - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 8004224543787032895, guid: 884f0a7b4db1ea146ba9b124b25e177e, type: 3}
   - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
-  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
-  - {fileID: 7321320869451458100, guid: 94d6b82ede72a8a4699dd7000f893297, type: 3}
+  - {fileID: 6940028965011416869, guid: c3c714746df5df74896424e4c89621a0, type: 3}
   _enemySpawnPointArray:
   - {fileID: 0}
   - {fileID: 0}

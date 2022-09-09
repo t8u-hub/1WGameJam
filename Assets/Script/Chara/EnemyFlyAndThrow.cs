@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class EnemyFlying : Enemy
+public class EnemyFlyAndThrow : Enemy
 {
     // 基準高さ
     private float _defaultHeight = 75f;
 
     private bool _defaultMoveRight;
 
-    public static new EnemyFlying CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
+    [SerializeField]
+    private EnemyAttackBall _ball;
+
+    public static EnemyFlyAndThrow CreateObject(EnemyFlyAndThrow prefab, Parameter paramter, Transform parentTransform)
     {
-        var enemyFlying = GameObject.Instantiate<EnemyFlying>(prefab as EnemyFlying, parentTransform);
+        var enemyFlying = GameObject.Instantiate<EnemyFlyAndThrow>(prefab, parentTransform);
         enemyFlying._parameter = paramter;
         enemyFlying.transform.localPosition = Vector3.zero;
         enemyFlying._hp = paramter.HitPoint;
@@ -47,9 +50,9 @@ public class EnemyFlying : Enemy
                 // 右に行くか左に行くか
                 var horizontalVector = _defaultMoveRight ? Vector3.right : Vector3.left;
 
-                // 必要なら上へのベクトルも足す
-                var verticalVector = (transform.position.y < _defaultHeight) ? Vector3.up :
-                                     (transform.position.y > _defaultHeight) ? Vector3.down : Vector3.zero;
+                // 必要なら上下へのベクトルも足す (投擲エネミーなので基本上めにいくように傾斜かける)
+                var verticalVector = (transform.position.y < _defaultHeight) ? Vector3.up * 2f :
+                                     (transform.position.y > _defaultHeight) ? Vector3.down / 10f : Vector3.zero;
 
                 // CSV指定の速度スケールをかける
                 var movedir = (horizontalVector + verticalVector).normalized;
@@ -95,24 +98,21 @@ public class EnemyFlying : Enemy
     /// <summary>
     /// 攻撃可能なら攻撃
     /// </summary>
-    /// <returns>後ろの処理をスキップしたかったらtrue</returns>
+    /// <returns>攻撃できたらtrue</returns>
     protected override bool AttackIfCan()
     {
-        if (_attackArea.IsInArea)
+        if (_state == State.Move)
         {
-            if (Player.Instance != null && !Player.Instance.InAttacking)
-            {
-                _state = State.Attack;
-                _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
-                return true;
-            }
-            else
-            {
-                _state = State.Idle;
-                _image.sprite = _imageArray[(int)_state];
-                return true;
-            }
+            // 直前がプレイヤーに近づくモーションなら攻撃していい
+            _state = State.Attack;
+            _image.sprite = _imageArray[(int)_state];
+
+            var targetDir = (_targetTransform.position - transform.position).normalized;
+            var ball = GameObject.Instantiate<EnemyAttackBall>(_ball, transform.parent);
+            ball.transform.position = transform.position;
+            ball.Throw(targetDir, _parameter.AttackPower);
+
+            return true;
         }
 
         return false;
@@ -140,12 +140,6 @@ public class EnemyFlying : Enemy
     /// <returns> 残り時間を無視して次のモーションを抽選する必要があればtrue </returns>
     public override bool UpdateExistsRemainMotionTime()
     {
-        // 被ダメor攻撃中以外でプレイヤーが攻撃できる領域にいる場合は強制で次の状態抽選を走らせる
-        if (_state != State.Damaging && _state != State.Attack && _attackArea.IsInArea)
-        {
-            return true;
-        }
-
         return false;
     }
 }
