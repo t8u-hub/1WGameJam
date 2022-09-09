@@ -205,4 +205,9 @@ public class PlayerPositionController : MonoBehaviour
             }
         }
     }
+
+    public void ResetVerticalSpeed()
+    {
+        _speed.y = _speed.y > 0f ? 0f : _speed.y;
+    }
 }
