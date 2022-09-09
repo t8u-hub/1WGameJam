@@ -3,12 +3,14 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    private enum State
+    protected enum State
     {
-        Default,    // 静止or巡回
+        Idle,    // 静止
         Move,       // プレイヤーに向かって動く
         Attack,     // 攻撃
         Damaging,     // 被ダメ
+        Default,       // 巡回
+
         Knockback,    // ノックバック（被ダメ開始後１Fだけなる）
     }
 
@@ -19,7 +21,7 @@ public class Enemy : MonoBehaviour
     private Sprite[] _imageArray;
 
     [SerializeField]
-    private Transform _imageTransform;
+    protected Transform _imageTransform;
 
     [SerializeField]
     private DamageText _damageText;
@@ -35,37 +37,37 @@ public class Enemy : MonoBehaviour
 
     private static readonly Vector3 LEFT = Vector3.left;
     private static readonly Vector3 RIGHT = Vector3.right;
-    private static readonly Vector3 ZERO = Vector3.zero;
+    protected static readonly Vector3 ZERO = Vector3.zero;
     private static readonly Vector3 UP = Vector3.up;
 
     private static readonly Vector3 GRAVITY_ACCELERATION = new Vector3(0f, -9.8f, 0f) * 80;
-    private static readonly Vector3 KNOCK_BACK_SPEED = new Vector3(300f, 0, 0);
-    private Vector3 _previousPosition;
-    private Vector3 _acceleration = Vector3.zero;
-    private Vector3 _speed = Vector3.zero;
+    protected static readonly Vector3 KNOCK_BACK_SPEED = new Vector3(300f, 0, 0);
+    protected Vector3 _previousPosition;
+    protected Vector3 _acceleration = Vector3.zero;
+    protected Vector3 _speed = Vector3.zero;
 
     public int Id => _parameter.Id;
     public int DropItemId => _parameter.DropItemId;
 
-    bool _moveRight = false;
-    bool _moveLeft = false;
+    protected bool _moveRight = false;
+    protected bool _moveLeft = false;
     bool _chase = false;
 
     // スポーンした直後だけ宙に浮いている想定
-    bool _isGround = false;
+    private bool _isGround = false;
 
-    private Transform _targetTransform;
+    protected Transform _targetTransform;
 
-    private Parameter _parameter;
+    protected Parameter _parameter;
 
-    private int _hp;
+    protected int _hp;
 
-    private State _state;
+    protected State _state;
 
     /// <summary>
     /// 現在のモーションを続ける時間
     /// </summary>
-    private float _remainMoveTime = 0f;
+    protected float _remainMoveTime = 0f;
 
     public class Parameter
     {
@@ -82,7 +84,7 @@ public class Enemy : MonoBehaviour
         enemyManager._parameter = paramter;
         enemyManager.transform.localPosition = Vector3.zero;
         enemyManager._hp = paramter.HitPoint;
-        enemyManager._state = State.Default;
+        enemyManager._state = State.Idle;
         enemyManager._image.sprite = enemyManager._imageArray[0];
 
         return enemyManager;
@@ -136,20 +138,10 @@ public class Enemy : MonoBehaviour
 
         // 次の状態を抽選
 
-        if (_attackArea.IsInArea && _isGround)
+        // 敵が攻撃可能範囲内にいたら接近を試みる
+        if (_attackArea.IsInArea)
         {
-            // デフォ敵は着地していないと攻撃できない
-            if (Player.Instance != null && !Player.Instance.InAttacking)
-            {
-                _state = State.Attack;
-                _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
-            }
-            else
-            {
-                _state = State.Default;
-                _image.sprite = _imageArray[(int)_state];
-            }
+            AttackIfCan();
             return;
         }
 
@@ -157,10 +149,10 @@ public class Enemy : MonoBehaviour
         var rand = Random.Range(0, 100);
         if (rand < 50)
         {
-            _state = State.Default;
+            _state = State.Idle;
             _image.sprite = _imageArray[(int)_state];
             // 停止 or 旋回処理
-
+            OnStartDefaultMotion();
         }
         else
         {
@@ -168,11 +160,50 @@ public class Enemy : MonoBehaviour
             _image.sprite = _imageArray[(int)_state];
             // プレイヤーに近寄る
             _chase = true;
+            OnStartChaseMotion();
         }
 
     }
 
+    protected virtual void OnStartDefaultMotion()
+    {
+
+    }
+
+
+    protected virtual void OnStartChaseMotion()
+    {
+
+    }
+
+    /// <summary>
+    /// 攻撃可能なら攻撃
+    /// </summary>
+    /// <returns>攻撃できたらtrue</returns>
+    protected virtual void AttackIfCan()
+    {
+        // デフォ敵は着地していないと攻撃できない
+        if (_isGround && Player.Instance != null && !Player.Instance.InAttacking)
+        {
+            _state = State.Attack;
+            _image.sprite = _imageArray[(int)_state];
+            BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
+            return;
+        }
+        else
+        {
+            _state = State.Idle;
+            _image.sprite = _imageArray[(int)_state];
+            return;
+        }
+    }
+
     public void FixedUpdate()
+    {
+        FixedUpdateInner();
+    }
+
+    public virtual void FixedUpdateInner()
     {
         if (_hp <= 0)
         {
