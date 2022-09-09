@@ -98,9 +98,11 @@ public class EnemySpawner : MonoBehaviour
         var spawnPoint = _enemySpawnPointArray[info.SpawnPoint - 1]; // csvデータは1始まりなのでIndexは-１する
         var parameter = new Enemy.Parameter
         {
+            Id = info.EnemyId,
             HitPoint = masterEnemyData.Hp, //?
             MoveSpeed = masterEnemyData.Speed * coefData.SpeedCoef,
             AttackPower = masterEnemyData.Attack * coefData.DamegeCoef,
+            DropItemId = masterEnemyData.DropItemId,
         };
 
         var enemy = Enemy.CreateObject(enemyPrefab, parameter, _enemyPrefabRoot);
