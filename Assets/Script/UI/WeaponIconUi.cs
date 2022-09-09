@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class WeaponIconUi : MonoBehaviour
 {
+    private static readonly Vector3 DEFAULT_SCALE = new Vector3(1f, 1f, 1f);
+    private static readonly Vector3 PUSED_SCALE = new Vector3(.95f, .95f, 1f);
+
     [SerializeField]
     private Image _image;
 
@@ -13,6 +16,9 @@ public class WeaponIconUi : MonoBehaviour
 
     [SerializeField]
     Animation _animation;
+
+    [SerializeField]
+    KeyCode _keyCode;
 
     private Sprite _nextSprite = null;
 
@@ -26,5 +32,21 @@ public class WeaponIconUi : MonoBehaviour
     {
         _image.sprite = _nextSprite;
         _image.color = Color.white;
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetKey(_keyCode) && !_animation.isPlaying)
+        {
+            this.transform.localScale = PUSED_SCALE;
+            return;
+        }
+
+        if (!Input.GetKey(_keyCode) && !_animation.isPlaying && this.transform.localScale.x != 1f)
+        {
+            this.transform.localScale = DEFAULT_SCALE;
+            return;
+        }
     }
 }
