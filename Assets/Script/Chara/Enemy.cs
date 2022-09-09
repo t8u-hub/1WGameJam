@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -8,9 +8,15 @@ public class Enemy : MonoBehaviour
         Default,    // 静止or巡回
         Move,       // プレイヤーに向かって動く
         Attack,     // 攻撃
-        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）
         Damaging,     // 被ダメ
+        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）
     }
+
+    /// <summary>
+    /// 基本Stateの順で配列に登録すること
+    /// </summary>
+    [SerializeField]
+    private Sprite[] _imageArray;
 
     [SerializeField]
     private Transform _imageTransform;
@@ -23,6 +29,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private EnemyAttackArea _attackArea;
+
+    [SerializeField]
+    private Image _image;
 
     private static readonly Vector3 LEFT = Vector3.left;
     private static readonly Vector3 RIGHT = Vector3.right;
@@ -74,12 +83,7 @@ public class Enemy : MonoBehaviour
         enemyManager.transform.localPosition = Vector3.zero;
         enemyManager._hp = paramter.HitPoint;
         enemyManager._state = State.Default;
-        if (paramter.DropItemId != 0)
-        {
-            // アイテムをドロップする敵は気持ちサイズを大きくする仮処理
-            var rectTransform = enemyManager.transform as RectTransform;
-            rectTransform.sizeDelta = rectTransform.sizeDelta * 1.5f;
-        }
+        enemyManager._image.sprite = enemyManager._imageArray[0];
 
         return enemyManager;
     }
@@ -138,11 +142,13 @@ public class Enemy : MonoBehaviour
             if (Player.Instance != null && !Player.Instance.InAttacking)
             {
                 _state = State.Attack;
+                _image.sprite = _imageArray[(int)_state];
                 BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
             }
             else
             {
                 _state = State.Default;
+                _image.sprite = _imageArray[(int)_state];
             }
             return;
         }
@@ -152,12 +158,14 @@ public class Enemy : MonoBehaviour
         if (rand < 50)
         {
             _state = State.Default;
+            _image.sprite = _imageArray[(int)_state];
             // 停止 or 旋回処理
 
         }
         else
         {
             _state = State.Move;
+            _image.sprite = _imageArray[(int)_state];
             // プレイヤーに近寄る
             _chase = true;
         }
@@ -270,6 +278,8 @@ public class Enemy : MonoBehaviour
         {
             _state = State.Knockback;
         }
+
+        _image.sprite = _imageArray[(int)State.Damaging];
     }
     
     public void OnDeadAnimationEnd()
