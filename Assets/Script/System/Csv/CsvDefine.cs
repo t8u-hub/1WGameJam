@@ -64,7 +64,7 @@ public static class CsvDefine
     {
         public const string PATH = "enemy_coef";
 
-        public const string WAVE = "flag";
+        public const string WAVE = "wave";
         public const string DAMEGE_COEF = "dmgcoef";
         public const string SPEED_COEF = "speedcoef";
     }
