@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     class ActionEnableState
     {
         /// <summary> そのモーションが解放されているか(未実装) </summary>
-        public bool _isReleased = true;
+        private bool _isReleased = false;
 
         /// <summary> リキャストタイムか </summary>
         private bool _isInRecastTime;
@@ -78,6 +78,11 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(time);
             _isInRecastTime = false;
+        }
+
+        public void ReleaseAction()
+        {
+            _isReleased = true;
         }
     }
 
@@ -115,6 +120,9 @@ public class Player : MonoBehaviour
     private List<Weapon> _weaponList;
     private List<Attack> _attackList;
 
+    // 所持アイテムデータ
+    private Dictionary<CsvDefine.ActionData.AttackType, Weapon> _equipWeaponDict;
+
     /// <summary>
     /// 今の攻撃モーションの残り時間
     /// </summary>
@@ -134,6 +142,21 @@ public class Player : MonoBehaviour
 
         var actionCsv = new CsvReader().Create(CsvDefine.ActionData.PATH).CsvData;
         _attackList = actionCsv.Select(csvData => new Attack(csvData)).ToList();
+
+        _equipWeaponDict = new Dictionary<CsvDefine.ActionData.AttackType, Weapon>()
+        {
+            // 武器ID101は初期装備
+            {CsvDefine.ActionData.AttackType.Normal, _weaponList.Find(weapon => weapon.Id == 101) },
+            {CsvDefine.ActionData.AttackType.HorizontalMove, null },
+            {CsvDefine.ActionData.AttackType.MiddleDistance, null },
+            {CsvDefine.ActionData.AttackType.LongRange, null },
+            {CsvDefine.ActionData.AttackType.VerticalMove, null },
+        };
+
+        // 移動、ジャンプ、通常攻撃は最初からできる
+        _actionEnableStateDict[ActionType.Move].ReleaseAction();
+        _actionEnableStateDict[ActionType.Jump].ReleaseAction();
+        _actionEnableStateDict[ActionType.NormalAttack].ReleaseAction();
     }
 
     private void SetActionEnableState(CsvDefine.ActionData.AttackType attackType, ActionType actionType)
@@ -153,7 +176,7 @@ public class Player : MonoBehaviour
 
     private void SetAllActionRestrictionState(bool enable)
     {
-        foreach(var actionEnableState in _actionEnableStateDict)
+        foreach (var actionEnableState in _actionEnableStateDict)
         {
             actionEnableState.Value.SetRestriction(enable);
         }
@@ -166,7 +189,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        
+
         if (_attackMotionTime > 0f)
         {
             _attackMotionTime -= Time.deltaTime;
@@ -183,77 +206,82 @@ public class Player : MonoBehaviour
         if (_actionEnableStateDict[ActionType.NormalAttack].CanExec && Input.GetKeyDown(KeyCode.Z))
         {
             // 通常攻撃
-            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-            var weapon = _weaponList.First(weapon => weapon.Type == 1);
-
-            _attackMotionTime = .1f;
-            _playerAttack.AttackNormal(weapon.Hit, weapon.Damage);
-            SetActionEnableState(CsvDefine.ActionData.AttackType.Normal, ActionType.NormalAttack);
+            var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.Normal];
+            if (weapon != null) 
+            {
+                _attackMotionTime = .1f;
+                _playerAttack.AttackNormal(weapon.Hit, weapon.Damage);
+                SetActionEnableState(CsvDefine.ActionData.AttackType.Normal, ActionType.NormalAttack);
+            }
         }
         else if (_actionEnableStateDict[ActionType.HorizontalMoveAttack].CanExec && Input.GetKeyDown(KeyCode.X))
         {
             // 移動攻撃
-            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-            var weapon = _weaponList.First(weapon => weapon.Type == 2);
-
-            _attackMotionTime = .5f;
-            SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
-            _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
-            _playerPositionController.DoHorizontalMoveAttack(() =>
+            var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.HorizontalMove];
+            if (weapon != null)
             {
-                if (_attackMotionTime > 0)
+                _attackMotionTime = .5f;
+                SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
+                _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
+                _playerPositionController.DoHorizontalMoveAttack(() =>
                 {
-                    _attackMotionTime = 0f;
-                    SetAllActionRestrictionState(false);
-                    _playerAttack.FinishAttack();
-                }
-            });
+                    if (_attackMotionTime > 0)
+                    {
+                        _attackMotionTime = 0f;
+                        SetAllActionRestrictionState(false);
+                        _playerAttack.FinishAttack();
+                    }
+                });
+            }
         }
         else if (_actionEnableStateDict[ActionType.MiddleDistanceAttack].CanExec && Input.GetKeyDown(KeyCode.C))
         {
             // 遠距離投擲攻撃
-            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-            var weapon = _weaponList.First(weapon => weapon.Type == 3);
-
-            _attackMotionTime = .1f;
-            _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent);
-            SetActionEnableState(CsvDefine.ActionData.AttackType.MiddleDistance, ActionType.MiddleDistanceAttack);
+            var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.MiddleDistance];
+            if (weapon != null)
+            {
+                _attackMotionTime = .1f;
+                _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent);
+                SetActionEnableState(CsvDefine.ActionData.AttackType.MiddleDistance, ActionType.MiddleDistanceAttack);
+            }
         }
         else if (_actionEnableStateDict[ActionType.LongRangeAttack].CanExec && Input.GetKeyDown(KeyCode.V))
         {
-            // 範囲攻撃
-            // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-            var weapon = _weaponList.First(weapon => weapon.Type == 4);
-
-            _attackMotionTime = .1f;
-            _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage);
-            SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);
-
+            // 広範囲攻撃
+            var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.LongRange];
+            if (weapon != null)
+            {
+                _attackMotionTime = .1f;
+                _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage);
+                SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);
+            }
         }
         else if (_actionEnableStateDict[ActionType.VerticalMoveAttack].CanExec && Input.GetKeyDown(KeyCode.DownArrow))
         {
             // 降下攻撃できるのは滞空中だけ
             if (!_playerPositionController.IsGround)
             {
-                // アイテム獲得のタイミングで有効な武器をキャッシュする処理を入れたい
-                var weapon = _weaponList.First(weapon => weapon.Type == 5);
-
-                SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
-                // 100秒降下し続けることはないと思うので...という最悪なコード
-                _attackMotionTime = 100f;
-                _playerPositionController.DoVerticalMoveAttack(() =>
+                // 広範囲攻撃
+                var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.VerticalMove];
+                if (weapon != null)
                 {
-                    _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage);
-                    // 着地してから固定秒数つづく
-                    _attackMotionTime = 0.1f;
-                });
+                    SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
+                    // 100秒降下し続けることはないと思うので...という最悪なコード
+                    _attackMotionTime = 100f;
+                    _playerPositionController.DoVerticalMoveAttack(() =>
+                    {
+                        _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage);
+                        // 着地してから固定秒数つづく
+                        _attackMotionTime = 0.1f;
+                    });
+                }
             }
         }
 
         // 通常モーション
         var moveRight = _actionEnableStateDict[ActionType.Move].CanExec && Input.GetKey(KeyCode.RightArrow);
         var moveLeft = _actionEnableStateDict[ActionType.Move].CanExec && Input.GetKey(KeyCode.LeftArrow);
-        var jump = _actionEnableStateDict[ActionType.Jump].CanExec && 
+        var jump = _actionEnableStateDict[ActionType.Jump].CanExec &&
                         (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space));
         if (moveRight || moveLeft || jump)
         {
@@ -263,5 +291,25 @@ public class Player : MonoBehaviour
             _playerAttack.FinishAttack();
         }
         _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
+    }
+
+    public void GetItem(int itemId)
+    {
+        var weapon = _weaponList.Find(weapon => weapon.Id == itemId);
+        if (weapon == null)
+        {
+            Debug.LogError($"存在しない武器ID{itemId}");
+            return;
+        }
+
+        var attackType = (CsvDefine.ActionData.AttackType)weapon.Type;
+        var currentEquipWeapon = _equipWeaponDict[attackType];
+        if (currentEquipWeapon == null || currentEquipWeapon?.Level < weapon.Level)
+        {
+            _equipWeaponDict[attackType] = weapon;
+            // CsvDefine.ActionData.AttackType からActionTypeへキャストするため＋1する
+            _actionEnableStateDict[(ActionType)weapon.Type + 1].ReleaseAction();
+        }
+
     }
 }

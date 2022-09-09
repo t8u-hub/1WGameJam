@@ -11,7 +11,7 @@ public class BattleManager : MonoBehaviour
 
 
     [SerializeField]
-    private GameObject _playerPrefab;
+    private Player _playerPrefab;
 
     [SerializeField]
     private Transform _playerSpawnPoint;
@@ -19,7 +19,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private EnemySpawner _enemySpawner;
 
-    private Transform _playerTransform;
+    private Player _player;
 
     /// <summary>
     /// 獲得済のアイテムID
@@ -42,13 +42,21 @@ public class BattleManager : MonoBehaviour
     public int CurrentScore { get; private set; }
 
     /// <summary>
+    /// 現在スポーンしている総エネミー数
+    /// </summary>
+    public int CurrentEnemyCount { get; private set; }
+
+    /// <summary>
     /// 表示中の敵一覧
     /// </summary>
     private List<Enemy> _enemyList = new List<Enemy>();
+    public IEnumerable<Enemy> EnemyList => _enemyList;
 
     private BattleWaveModel _battleWaveModel;
 
     bool _playGame = false;
+
+    private GameUi _gameUi;
 
     void Awake()
     {
@@ -76,12 +84,14 @@ public class BattleManager : MonoBehaviour
         _battleWaveModel.UpdateWaveModel();
     }
 
-    public void GameStart()
+    public void GameStart(GameUi gameUi)
     {
+        _gameUi = gameUi;
+
         // プレイヤー生成
-        var playerObj = GameObject.Instantiate(_playerPrefab, _playerSpawnPoint);
+        var playerObj = GameObject.Instantiate<Player>(_playerPrefab, _playerSpawnPoint);
         playerObj.transform.localPosition = Vector3.zero;
-        _playerTransform = playerObj.transform;
+        _player = playerObj;
 
         // ウェーブ初期化
         _battleWaveModel.Initialize();
@@ -100,10 +110,12 @@ public class BattleManager : MonoBehaviour
             for (int i = 0; i < spawnInfo.AppearNum; i++)
             {
                 var enemy = _enemySpawner.SpawnEnemy(_battleWaveModel.CurrentWave, spawnInfo);
-                enemy.SetTargetTransform(_playerTransform);
+                enemy.SetTargetTransform(_player.transform);
                 _enemyList.Add(enemy);
             }
         }
+
+        CurrentEnemyCount = _enemyList.Count;
     }
 
     public void OnEnemyKilled(Enemy enemy)
@@ -111,6 +123,15 @@ public class BattleManager : MonoBehaviour
         if (_enemyList.Contains(enemy))
         {
             _enemyList.Remove(enemy);
+            CurrentEnemyCount = _enemyList.Count;
+
+            // アイテムをドロップする敵が死んだときの処理
+            if (enemy.DropItemId != 0)
+            {
+                Debug.Log($"獲得アイテム：{enemy.DropItemId}");
+                _player.GetItem(enemy.DropItemId);
+                _gameUi.UpdateItemUiIfNeed(enemy.DropItemId);
+            }
         }
     }
 }

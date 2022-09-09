@@ -11,6 +11,7 @@ public class EnemySpawnInfo
     public int EnemyId { get; }
     public int AppearNum { get; }
     public int SpawnPoint { get; }
+    public int DropItemId { get; }
 
     public EnemySpawnInfo(int id, int num, int point)
     {
@@ -25,23 +26,46 @@ public class EnemySpawnInfo
 /// </summary>
 public class BattleWaveModel
 {
-    private int _currentWave;
-    public int CurrentWave => _currentWave;
+    class Wave
+    {
+        public int Id;
+        public CsvDefine.WaveData.WaveType WaveType;
+        public float AttacCoef;
+        public float GaugeCoef;
+        public List<int> TypeValueList;
+    }
 
-    private int _totalWaveCount;
+    private int _currentWaveId;
+    public int CurrentWave => _currentWaveId;
 
-    private CsvReader _waveData;
+    private Wave _currentWaveData;
+
+    private List<Wave> _waveList;
 
     private Dictionary<int /* waveId */, List<EnemySpawnInfo>> _waveEnemyDict;
+
+    private float _currentWaveTime = 0;
 
     public BattleWaveModel()
     {
         // Wave一覧とどんな条件でWaveが終わるか情報
-        _waveData = new CsvReader();
-        _waveData.Create(CsvDefine.WaveData.PATH);
+        var waveData = new CsvReader().Create(CsvDefine.WaveData.PATH).CsvData;
+        _waveList = waveData.Select(csvData => new Wave
+        {
+            Id = csvData[CsvDefine.WaveData.WAVE_ID],
+            WaveType = (CsvDefine.WaveData.WaveType)csvData[CsvDefine.WaveData.WAVE_TYPE],
+            AttacCoef = csvData[CsvDefine.WaveData.INFLATION_COEF] / CsvDefine.INT2FLOAT,
+            GaugeCoef = csvData[CsvDefine.WaveData.GAUGE_COEF] / CsvDefine.INT2FLOAT,
+            TypeValueList = new List<int>()
+            {
+                csvData[CsvDefine.WaveData.VALUE_1],
+                csvData[CsvDefine.WaveData.VALUE_2],
+                csvData[CsvDefine.WaveData.VALUE_3],
+                csvData[CsvDefine.WaveData.VALUE_4],
+                csvData[CsvDefine.WaveData.VALUE_5],
+            },
+        }).ToList();
 
-        var waveInfo = 
-        _totalWaveCount = _waveData.CsvData.Count;
 
         // Waveごとに出現させる敵の情報
         var waveEnemyDataList = new CsvReader().Create(CsvDefine.WaveEnemyData.PATH).CsvData;
@@ -68,19 +92,73 @@ public class BattleWaveModel
 
     }
 
-
     public void Initialize()
     {
-        _currentWave = 1;
-
-        // 1WAVE目のエネミーをスポーン
-        BattleManager.Instance.SpawnEnemy(_waveEnemyDict[_currentWave]);
+        // WAVE1からはじめる
+        StartWave(1);
     }
 
     public void UpdateWaveModel()
     {
-        // Wave終了判定
+        // 時間更新
+        _currentWaveTime += Time.deltaTime;
 
-        // Wave終了条件を満たしていたら次のエネミーをスポーン
+        // Wave終了判定
+        var waveEnd = false;
+
+        switch (_currentWaveData.WaveType)
+        {
+            case CsvDefine.WaveData.WaveType.LEAST_TOTAL_ENEMY_COUNT:
+                var currentEnemyCount = BattleManager.Instance.CurrentEnemyCount;
+                if (currentEnemyCount <= _currentWaveData.TypeValueList[0])
+                {
+                    // 残りのエネミー数が定数以下ならウェーブ終了
+                    waveEnd = true;
+                }
+                break;
+            case CsvDefine.WaveData.WaveType.TIME_PAST:
+                var limitTime = (float)_currentWaveData.TypeValueList[0] / CsvDefine.INT2FLOAT;
+                if (_currentWaveTime >= limitTime)
+                {
+                    // ウェーブが始まってから一定時間経過していたら終了
+                    waveEnd = true;
+                }
+                break;
+            case CsvDefine.WaveData.WaveType.SUBDUE_ENEMY:
+                var currentEnemyList = BattleManager.Instance.EnemyList;
+                // リスト内のIdの敵キャラが一体もいなければウェーブ終了
+                waveEnd = !currentEnemyList.Any(enemy => _currentWaveData.TypeValueList.Any(value => value == enemy.Id));
+                break;
+        }
+
+        // Wave終了条件を満たしていたら次のウェーブへ移行
+        if (waveEnd)
+        {
+            if (_currentWaveId >= _waveList.Count)
+            {
+                // リザルトへ遷移？
+            }
+            else
+            {
+                StartWave(_currentWaveId + 1);
+            }
+        }
+
+    }
+
+    private void StartWave(int waveId)
+    {
+        _currentWaveId = waveId;
+        _currentWaveData = _waveList.Find(wave => wave.Id == waveId);
+        if (_currentWaveData == null)
+        {
+            Debug.LogError("ウェーブのデータがない");
+            return;
+        }
+
+        _currentWaveTime = 0f;
+
+        // 1WAVE目のエネミーをスポーン
+        BattleManager.Instance.SpawnEnemy(_waveEnemyDict[_currentWaveId]);
     }
 }

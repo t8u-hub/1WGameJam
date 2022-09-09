@@ -22,6 +22,9 @@ public class Enemy : MonoBehaviour
     private Vector3 _acceleration = Vector3.zero;
     private Vector3 _speed = Vector3.zero;
 
+    public int Id => _parameter.Id;
+    public int DropItemId => _parameter.DropItemId;
+
     bool _moveRight = false;
     bool _moveLeft = false;
     bool _chase = false;
@@ -43,10 +46,11 @@ public class Enemy : MonoBehaviour
 
     public class Parameter
     {
+        public int Id;
         public int HitPoint;
         public float MoveSpeed;
         public float AttackPower;
-        public int dropItemId;
+        public int DropItemId;
     }
 
     public static Enemy CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
@@ -55,6 +59,13 @@ public class Enemy : MonoBehaviour
         enemyManager._parameter = paramter;
         enemyManager.transform.localPosition = Vector3.zero;
         enemyManager._hp = paramter.HitPoint;
+
+        if (paramter.DropItemId != 0)
+        {
+            // アイテムをドロップする敵は気持ちサイズを大きくする仮処理
+            var rectTransform = enemyManager.transform as RectTransform;
+            rectTransform.sizeDelta = rectTransform.sizeDelta * 1.5f;
+        }
 
         return enemyManager;
     }
@@ -188,6 +199,7 @@ public class Enemy : MonoBehaviour
 
         if (_hp <= 0)
         {
+
             _destroyAnimation.Play();
         }
     }
