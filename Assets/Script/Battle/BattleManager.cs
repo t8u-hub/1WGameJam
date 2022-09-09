@@ -142,6 +142,13 @@ public class BattleManager : MonoBehaviour
 
     public void EnemyAttack(float damage)
     {
+        if (_player.InNoDamageTime)
+        {
+            return;
+        }
+
+        _player.OnDamage();
         TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
+        Debug.Log($"総ダメージ{TotalDamage}");
     }
 }

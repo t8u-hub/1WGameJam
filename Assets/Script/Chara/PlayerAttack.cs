@@ -43,18 +43,33 @@ public class PlayerAttack : MonoBehaviour
         _hitCount = 0;
     }
 
+    public void ResetCollider()
+    {
+        // 使うコライダー
+        _boxCollider.enabled = true;
+
+        // 範囲
+        _boxCollider.size = new Vector2(0, 0);
+        _boxCollider.offset = new Vector2(0, 0);
+
+        _boxCollider.enabled = false;
+    }
+
+
     /// <summary>
     /// 通常攻撃
     /// </summary>
 
     public void AttackNormal(int hit, int damage)
     {
-        // 使うコライダー
-        _boxCollider.enabled = true;
+        ResetCollider();
 
         // 範囲
         _boxCollider.size = new Vector2(40, 60);
         _boxCollider.offset = new Vector2(-20, 0);
+
+        // 使うコライダー
+        _boxCollider.enabled = true;
 
         // ダメージとヒット数
         _damageAmount = damage;
@@ -70,6 +85,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     public void AttackHorizontalMove(int hit, int damage)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
@@ -100,6 +117,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     public void AttackLongRange(int hit, int damage)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
@@ -120,6 +139,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     public void AttackVerticalMove(int hit, int damage)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
@@ -137,12 +158,13 @@ public class PlayerAttack : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
+        if (collision.tag == "Enemy" )
         {
             var enemy = collision.transform.GetComponent<Enemy>();
             enemy?.OnDamage(_hitCount, _damageAmount);
         }
     }
+
 
     public void FinishAttack()
     {
