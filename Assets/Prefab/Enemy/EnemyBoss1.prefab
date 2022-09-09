@@ -51,7 +51,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -63.62552, y: -1.3122253}
+  m_Offset: {x: -49.215904, y: -16.922646}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -62,7 +62,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 102.05069, y: 154.92029}
+  m_Size: {x: 73.23146, y: 123.69945}
   m_EdgeRadius: 0
 --- !u!114 &8142622349224491650
 MonoBehaviour:
@@ -116,7 +116,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -310, y: -201}
-  m_SizeDelta: {x: 250, y: 250}
+  m_SizeDelta: {x: 120, y: 131.2832}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!50 &7302028959007477197
 Rigidbody2D:
@@ -152,7 +152,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -7.275337, y: 81.63435}
+  m_Offset: {x: -2.6700096, y: 63.724716}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -163,7 +163,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 148.15767, y: 163.2687}
+  m_Size: {x: 87.7766, y: 127.44943}
   m_EdgeRadius: 0
 --- !u!114 &7321320869451458100
 MonoBehaviour:
@@ -178,10 +178,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageArray:
-  - {fileID: 21300000, guid: bbe88d11f1acbb044a106a27b79042d0, type: 3}
-  - {fileID: 21300000, guid: f5dcd8072823e704a92f97b1f43f851e, type: 3}
-  - {fileID: 21300000, guid: deac7ceeb224ff343a0f07e3034b4a73, type: 3}
-  - {fileID: 21300000, guid: cea10e14cca982847b1196894f90b74a, type: 3}
+  - {fileID: 21300000, guid: 7aa10f3a03ffe2240bc92ed0a33fe23b, type: 3}
+  - {fileID: 21300000, guid: 51ae4c144fe950240986bae14fbabd18, type: 3}
+  - {fileID: 21300000, guid: 85a0d45cf605dd34c8f1626135fb6156, type: 3}
+  - {fileID: 21300000, guid: 3d561d738aca4fa429f31b1534a84c73, type: 3}
   _imageTransform: {fileID: 7302028960358875232}
   _damageText: {fileID: 2573675508876700816, guid: 783b92428e0a491409a3737be1def3dc,
     type: 3}
@@ -250,10 +250,10 @@ RectTransform:
   m_Father: {fileID: 7302028959007477234}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -46}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 178.555}
+  m_SizeDelta: {x: 250, y: 199.1104}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7302028960358875234
 CanvasRenderer:
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bbe88d11f1acbb044a106a27b79042d0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a9b4004d055fbaa4086121f2e08d2b71, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
