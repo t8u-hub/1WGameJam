@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
         // 敵のマスターデータ読む
         _enemyInfoList = new List<EnemyDefaultInfo>();
         var enemyDataCsv = new CsvReader().Create(CsvDefine.EnemyData.PATH).CsvData;
-        foreach(var enemyData in enemyDataCsv)
+        foreach (var enemyData in enemyDataCsv)
         {
             var enemyInfo = new EnemyDefaultInfo
             {
@@ -59,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
         // ウェーブごとでかかる倍率のマスターデータ読む
         _enemyCoefDict = new Dictionary<int, (float DamegeCoef, float SpeedCoef)>();
         var enemyCoefCsv = new CsvReader().Create(CsvDefine.EnemyCoef.PATH).CsvData;
-        foreach(var coefData in enemyCoefCsv)
+        foreach (var coefData in enemyCoefCsv)
         {
             var wave = coefData[CsvDefine.EnemyCoef.WAVE];
             var speedCoef = (float)coefData[CsvDefine.EnemyCoef.SPEED_COEF] / CsvDefine.INT2FLOAT;
@@ -95,7 +95,7 @@ public class EnemySpawner : MonoBehaviour
 
         // スポーン処理
         var type = masterEnemyData.Type;
-        var index = (masterEnemyData.DropItemId == 0)? type - 1 : type + 4;
+        var index = (masterEnemyData.DropItemId == 0) ? type - 1 : type + 4;
         var enemyPrefab = _enemyPrefabArray[index];
         var spawnPoint = _enemySpawnPointArray[info.SpawnPoint - 1]; // csvデータは1始まりなのでIndexは-１する
         var parameter = new Enemy.Parameter
@@ -107,9 +107,40 @@ public class EnemySpawner : MonoBehaviour
             DropItemId = masterEnemyData.DropItemId,
         };
 
-        var enemy = Enemy.CreateObject(enemyPrefab, parameter, _enemyPrefabRoot);
+        Enemy enemy;
+        if (type == 5)
+        {
+            enemy = SpawnFlying(enemyPrefab as EnemyFlying, parameter);
+        }
+        else if (type == 3)
+        {
+            enemy = SpawnFlyAndThrow(enemyPrefab as EnemyFlyAndThrow, parameter);
+        }
+        else
+        {
+            enemy = SpawnNormal(enemyPrefab, parameter);
+        }
+
         enemy.transform.position = spawnPoint.position;
 
+        return enemy;
+    }
+
+    public Enemy SpawnNormal(Enemy prefab, Enemy.Parameter parameter)
+    {
+        var enemy = Enemy.CreateObject(prefab, parameter, _enemyPrefabRoot);
+        return enemy;
+    }
+
+    public Enemy SpawnFlying(EnemyFlying prefab, Enemy.Parameter parameter)
+    {
+        var enemy = EnemyFlying.CreateObject(prefab, parameter, _enemyPrefabRoot);
+        return enemy;
+    }
+
+    public Enemy SpawnFlyAndThrow(EnemyFlyAndThrow prefab, Enemy.Parameter parameter)
+    {
+        var enemy = EnemyFlyAndThrow.CreateObject(prefab, parameter, _enemyPrefabRoot);
         return enemy;
     }
 }
