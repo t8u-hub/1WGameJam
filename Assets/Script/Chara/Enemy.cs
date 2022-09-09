@@ -195,6 +195,9 @@ public class Enemy : MonoBehaviour
         {
             var damageText = GameObject.Instantiate<DamageText>(_damageText, transform);
             damageText.PlayDamage(amount);
+
+            // 与えたダメージ量だけゲージ上昇
+            BattleManager.Instance.GaugeUp(hitCount * amount);
         }
 
         if (_hp <= 0)

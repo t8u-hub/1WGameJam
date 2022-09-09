@@ -509,7 +509,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4874226080041258547}
   - component: {fileID: 8474505053908216448}
-  - component: {fileID: -6765950525979634801}
   m_Layer: 0
   m_Name: GameUi
   m_TagString: Untagged
@@ -559,20 +558,7 @@ MonoBehaviour:
   - {fileID: 7245199214639267617}
   - {fileID: 4132475682770181398}
   - {fileID: 9190602113372231232}
---- !u!114 &-6765950525979634801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503550641459066634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99e466edd01f37141ab2796a9e923551, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _button: {fileID: 0}
-  _weaponIconDict: []
+  _attackGauge: {fileID: 4096351214696105356}
 --- !u!1 &8800782049926173653
 GameObject:
   m_ObjectHideFlags: 0

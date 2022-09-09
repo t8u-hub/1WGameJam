@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class GameUi : UiBase
-{
+{ 
+
     [SerializeField]
     private Button _button;
 
     [SerializeField]
     private WeaponIconUi[] _weaponIconDict;
+
+    [SerializeField]
+    private Slider _attackGauge;
 
     private class Weapon
     {
@@ -40,6 +44,9 @@ public class GameUi : UiBase
             .ToList();
 
         _earnedWeapon.Add(_weaponList.Find(weapon => weapon.Id == 101));
+
+        _attackGauge.minValue = 0;
+        _attackGauge.maxValue = 20;
     }
 
     private void OnClickStartButton()
@@ -73,5 +80,10 @@ public class GameUi : UiBase
         {
             _weaponIconDict[(int)data.Type - 1].SetNewWeapon(data.Level);
         }
+    }
+
+    public void Update()
+    {
+        _attackGauge.value = BattleManager.Instance.CurrentGauge;
     }
 }

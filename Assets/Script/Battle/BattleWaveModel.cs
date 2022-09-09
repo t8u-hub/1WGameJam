@@ -26,7 +26,7 @@ public class EnemySpawnInfo
 /// </summary>
 public class BattleWaveModel
 {
-    class Wave
+    public class Wave
     {
         public int Id;
         public CsvDefine.WaveData.WaveType WaveType;
@@ -39,6 +39,8 @@ public class BattleWaveModel
     public int CurrentWave => _currentWaveId;
 
     private Wave _currentWaveData;
+
+    public Wave CurrentWaveData => _currentWaveData;
 
     private List<Wave> _waveList;
 

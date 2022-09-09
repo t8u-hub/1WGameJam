@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 現在の必殺技ゲージの値
     /// </summary>
-    public int CurrentGauge { get; private set; }
+    public float CurrentGauge { get; private set; }
 
     /// <summary>
     /// 現在のプレイヤーHP
@@ -133,5 +133,10 @@ public class BattleManager : MonoBehaviour
                 _gameUi.UpdateItemUiIfNeed(enemy.DropItemId);
             }
         }
+    }
+
+    public void GaugeUp(int damage)
+    {
+        CurrentGauge += (float)damage / ( _battleWaveModel.CurrentWaveData.GaugeCoef * 1000f); // 値がめちゃ大きくなりそうなのでスケールかけとく
     }
 }
