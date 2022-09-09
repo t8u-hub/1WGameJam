@@ -111,6 +111,9 @@ public class Player : MonoSingleton<Player>
         {ActionType.VerticalMoveAttack, new ActionEnableState() },
     };
 
+    [SerializeField]
+    private CharacterAttackSetting _attackSetting;
+
     /// <summary>
     /// 見た目制御系
     /// </summary>
@@ -186,6 +189,7 @@ public class Player : MonoSingleton<Player>
         _actionEnableStateDict[ActionType.Move].ReleaseAction();
         _actionEnableStateDict[ActionType.Jump].ReleaseAction();
         _actionEnableStateDict[ActionType.NormalAttack].ReleaseAction();
+
     }
 
     private void SetActionEnableState(CsvDefine.ActionData.AttackType attackType, ActionType actionType)
@@ -221,12 +225,12 @@ public class Player : MonoSingleton<Player>
         if (_noDamageTime > 0f)
         {
             // NOTE：無敵が1秒前提のハードコーディング
-            if (_noDamageTime > 1f)
+            if (_noDamageTime > (_attackSetting.NoDamageTime - _attackSetting.RighdityTime))
             {
                 _noDamageTime -= Time.deltaTime;
-                if (_noDamageTime < 1f)
+                if (_noDamageTime < (_attackSetting.NoDamageTime - _attackSetting.RighdityTime))
                 {
-                    //  硬直は.秒4で解除
+                    //  硬直解除
                     SetAllActionRestrictionState(false);
 
                     // 画像を被弾状態から戻す
@@ -269,8 +273,9 @@ public class Player : MonoSingleton<Player>
                 // 画像を攻撃状態へ
                 _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
 
-                _attackMotionTime = .3f;
-                _playerAttack.AttackNormal(weapon.Hit, weapon.Damage);
+                var info = _attackSetting.GetNormalAttackInfo();
+                _attackMotionTime = info.RigidityTime;
+                _playerAttack.AttackNormal(weapon.Hit, weapon.Damage, info.HitArea);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.Normal, ActionType.NormalAttack);
             }
         }
@@ -283,10 +288,11 @@ public class Player : MonoSingleton<Player>
                 // 画像を攻撃状態へ
                 _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
 
-                _attackMotionTime = .5f;
+                var info = _attackSetting.GetHorizontalMoveAttackInfo();
+                _attackMotionTime = info.MaxLastTime ;
                 SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
-                _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage);
-                _playerPositionController.DoHorizontalMoveAttack(() =>
+                _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage, info.HitArea, info.MaxLastTime);
+                _playerPositionController.DoHorizontalMoveAttack(info.MaxLastTime, info.MoveSpeed, () =>
                 {
                     if (_attackMotionTime > 0)
                     {
@@ -309,22 +315,24 @@ public class Player : MonoSingleton<Player>
                 // 画像を攻撃状態へ
                 _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
 
-                _attackMotionTime = .2f;
-                _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent);
+                var info = _attackSetting.GetMiddleDistanceAttackInfo();
+                _attackMotionTime = info.RigidityTime;
+                _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent, info.HitArea, info.ThrowSpeed, info.ThrowPich);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.MiddleDistance, ActionType.MiddleDistanceAttack);
             }
         }
         else if (_actionEnableStateDict[ActionType.LongRangeAttack].CanExec && Input.GetKeyDown(KeyCode.V))
         {
             // 広範囲攻撃
+            var info = _attackSetting.GetLongRangeAttackInfo();
             var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.LongRange];
             if (weapon != null)
             {
                 // 画像を攻撃状態へ
                 _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Attack);
 
-                _attackMotionTime = .5f;
-                _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage);
+                _attackMotionTime = info.RigidityTime;
+                _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage, info.HitArea);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);
             }
         }
@@ -334,6 +342,7 @@ public class Player : MonoSingleton<Player>
             if (!_playerPositionController.IsGround)
             {
                 // 広範囲攻撃
+                var info = _attackSetting.GetVerticalMoveAttackInfo();
                 var weapon = _equipWeaponDict[CsvDefine.ActionData.AttackType.VerticalMove];
                 if (weapon != null)
                 {
@@ -344,11 +353,11 @@ public class Player : MonoSingleton<Player>
                     SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
                     // 100秒降下し続けることはないと思うので...という最悪なコード
                     _attackMotionTime = 100f;
-                    _playerPositionController.DoVerticalMoveAttack(() =>
+                    _playerPositionController.DoVerticalMoveAttack(info.MoveSpeed, () =>
                     {
-                        _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage);
+                        _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage, info.HitArea);
                         // 着地してから固定秒数つづく
-                        _attackMotionTime = 0.2f;
+                        _attackMotionTime = info.RigidityTime;
                     });
                 }
             }
@@ -394,7 +403,7 @@ public class Player : MonoSingleton<Player>
 
     public void OnDamage()
     {
-        _noDamageTime = 1.4f;
+        _noDamageTime = _attackSetting.NoDamageTime;
         
         // 念のためリセット
         _attackMotionTime = 0f;

@@ -11,12 +11,13 @@ public class AttackBall : MonoBehaviour
 
     private int _damage;
 
-    public void Throw(int hit, int damage, bool right)
+    public void Throw(float speed, float angle, int hit, int damage, bool right)
     {
         _hit = hit;
         _damage = damage;
-        var vector = right ? new Vector2(1, 1) : new Vector2(-1, 1);
-        _rigidBody.AddForce(vector * 300, ForceMode2D.Impulse);
+        var vector = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
+        if (!right) vector.x = -vector.x;
+        _rigidBody.AddForce(vector * speed, ForceMode2D.Impulse);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

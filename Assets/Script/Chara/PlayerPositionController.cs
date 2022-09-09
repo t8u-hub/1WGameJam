@@ -160,20 +160,20 @@ public class PlayerPositionController : MonoBehaviour
         }
     }
 
-    public void DoHorizontalMoveAttack(System.Action stopCallback)
+    public void DoHorizontalMoveAttack(float time, float speed, System.Action stopCallback)
     {
         _callback = stopCallback;
-        _attackMoveTime = 0.5f;
+        _attackMoveTime = time;
         _speed = _imageTransform.localScale.x > 0 ? Vector3.left : Vector3.right;
-        _speed *= 600f;
+        _speed *= speed;
         _state = State.HorizontalMoveAttack;
     }
 
-    public void DoVerticalMoveAttack(System.Action groundCallback)
+    public void DoVerticalMoveAttack(float speed, System.Action groundCallback)
     {
         _callback = groundCallback;
         _state = State.VerticalMoveAttack;
-        _speed = Vector3.down * 400;
+        _speed = Vector3.down * speed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

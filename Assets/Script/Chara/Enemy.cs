@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour
         if (_attackArea.IsInArea && _isGround)
         {
             // デフォ敵は着地していないと攻撃できない
-            if (!Player.Instance.InAttacking)
+            if (Player.Instance != null && !Player.Instance.InAttacking)
             {
                 _state = State.Attack;
                 BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
