@@ -478,7 +478,7 @@ public class Player : MonoSingleton<Player>
         if (_jumpWithSpace)
         {
             _spaceLongTapTime += Time.deltaTime;
-            if (_spaceLongTapTime > 1f)
+            if (_spaceLongTapTime > .5f)
             {
                 _spaceLongTapTime = 0f;
                 _jumpWithSpace = false;

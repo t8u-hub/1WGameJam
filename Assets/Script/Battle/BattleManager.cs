@@ -8,9 +8,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 必殺技ゲージの上限値
     /// </summary>
-    public static float MAX_GAUGE_VALUE = 1f;
-
-    private static Color32 SPECIAL_ATTACK_FADE_COLOR = new Color32(0, 0, 0, 128);
+    public static float MAX_GAUGE_VALUE = 100f;
 
     public bool StopUpdate { get; private set; } = false;
 
@@ -221,7 +219,7 @@ public class BattleManager : MonoBehaviour
 
         foreach(var enemy in _enemyList)
         {
-            enemy.OnDamage(1, 123);
+            enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef));
         }
     }
 }
