@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
 
         Default,       // 巡回 絵はIdleと一緒
         Knockback,    // ノックバック（被ダメ開始後１Fだけなる）絵はdamagingと一緒
+        WaitAttack,     // 攻撃待機
     }
 
     /// <summary>
@@ -82,6 +83,8 @@ public class Enemy : MonoBehaviour
 
         public int MoveWeight;
         public int StopWeight;
+
+        public float WaitTime;
     }
 
     public static Enemy CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
@@ -117,9 +120,9 @@ public class Enemy : MonoBehaviour
             _moveLeft = !isTargetRight;
         }
 
-        // 被ダメ中or攻撃中　あるいはプレイヤーが攻撃できない領域にいるならこのあとは特になにもしない
+        // 被ダメ中or攻撃中or攻撃待機中　あるいはプレイヤーが攻撃できない領域にいるならこのあとは特になにもしない
         // 逆に、被ダメor攻撃中以外でプレイヤーが攻撃できる領域にいる場合は強制で次の状態抽選を走らせる
-        if (!_isGround || _state == State.Damaging || _state == State.Attack || !_attackArea.IsInArea)
+        if (!_isGround || _state == State.Damaging || _state == State.Attack || _state == State.WaitAttack || !_attackArea.IsInArea)
         {
             return false;
         }
@@ -157,8 +160,15 @@ public class Enemy : MonoBehaviour
 
         // 次の状態を抽選
 
-        // 敵が攻撃可能範囲内にいたら接近を試みる
-        if (AttackIfCan())
+        // 攻撃待機状態が満了したら攻撃開始
+        if (_state == State.WaitAttack)
+        {
+            Attack();
+            return;
+        }
+
+        // 攻撃可能だったら攻撃待機状態へ
+        if (StartAttackWaitTimeIfCan())
         {
             return;
         }
@@ -198,20 +208,27 @@ public class Enemy : MonoBehaviour
         _image.sprite = _imageArray[(int)_state];
     }
 
+    protected virtual void Attack()
+    {
+        _state = State.Attack;
+        _image.sprite = _imageArray[(int)_state];
+        BattleManager.Instance.EnemyAttack(_parameter.AttackPower, transform.position.x);
+    }
+
     /// <summary>
     /// 攻撃可能なら攻撃
     /// </summary>
     /// <returns>後ろの処理をスキップしたかったらtrue</returns>
-    protected virtual bool AttackIfCan()
+    protected virtual bool StartAttackWaitTimeIfCan()
     {
         if (_attackArea.IsInArea)
         {
             // デフォ敵は着地していないと攻撃できない
             if (_isGround && Player.Instance != null && !Player.Instance.InAttacking)
             {
-                _state = State.Attack;
-                _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower, transform.position.x);
+                _state = State.WaitAttack;
+                _image.sprite = _imageArray[(int)State.Move];
+                _remainMoveTime = _parameter.WaitTime;
                 return true;
             }
             else
@@ -329,7 +346,6 @@ public class Enemy : MonoBehaviour
 
         if (_hp <= 0)
         {
-
             _destroyAnimation.Play();
             _state = State.Damaging; // 死ぬ場合はノックバックしない
         }

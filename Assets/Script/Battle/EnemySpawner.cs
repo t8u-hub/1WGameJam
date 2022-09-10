@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
         public int Hit;
         public float Speed;
         public int DropItemId;
+        public float WaitTime;
     }
 
     class EnemyActionWeight
@@ -62,6 +63,7 @@ public class EnemySpawner : MonoBehaviour
                 Hit = enemyData[CsvDefine.EnemyData.HIT_NUM],
                 Speed = (float)enemyData[CsvDefine.EnemyData.SPEED] / CsvDefine.INT2FLOAT,
                 DropItemId = enemyData[CsvDefine.EnemyData.DROP_ITEM_ID],
+                WaitTime = enemyData[CsvDefine.EnemyData.WAIT_TIME] / 1000f, // ミリ秒で数値が入ってる
             };
             _enemyInfoList.Add(enemyInfo);
         }
@@ -85,7 +87,6 @@ public class EnemySpawner : MonoBehaviour
                 WeithtStop = data[CsvDefine.EnemyAction.STOP_WEIGHT] / 100,
             })
             .ToList();
-
     }
 
     /// <summary>
@@ -134,6 +135,7 @@ public class EnemySpawner : MonoBehaviour
             DropItemId = masterEnemyData.DropItemId,
             MoveWeight = masterEnemyAction.WeightMove,
             StopWeight = masterEnemyAction.WeithtStop,
+            WaitTime = masterEnemyData.WaitTime,
         };
 
         Enemy enemy;

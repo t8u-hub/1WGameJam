@@ -55,6 +55,7 @@ public static class CsvDefine
         public const string HIT_NUM = "hit";
         public const string SPEED = "speed";
         public const string DROP_ITEM_ID = "item";
+        public const string WAIT_TIME = "wait_time";
     }
 
     /// <summary>

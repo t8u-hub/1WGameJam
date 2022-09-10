@@ -99,23 +99,30 @@ public class EnemyFlyAndThrow : Enemy
     /// 攻撃可能なら攻撃
     /// </summary>
     /// <returns>攻撃できたらtrue</returns>
-    protected override bool AttackIfCan()
+    protected override bool StartAttackWaitTimeIfCan()
     {
         if (_state == State.Move)
         {
-            // 直前がプレイヤーに近づくモーションなら攻撃していい
-            _state = State.Attack;
-            _image.sprite = _imageArray[(int)_state];
+            // 直前がプレイヤーに近づくモーションなら攻撃待機へ
 
-            var targetDir = (_targetTransform.position - transform.position).normalized;
-            var ball = GameObject.Instantiate<EnemyAttackBall>(_ball, transform.parent);
-            ball.transform.position = transform.position;
-            ball.Throw(targetDir, _parameter.AttackPower);
-
+            _state = State.WaitAttack;
+            _image.sprite = _imageArray[(int)State.Idle];
+            _remainMoveTime = _parameter.WaitTime;
             return true;
         }
 
         return false;
+    }
+
+    protected override void Attack()
+    {
+        _state = State.Attack;
+        _image.sprite = _imageArray[(int)_state];
+
+        var targetDir = (_targetTransform.position - transform.position).normalized;
+        var ball = GameObject.Instantiate<EnemyAttackBall>(_ball, transform.parent);
+        ball.transform.position = transform.position;
+        ball.Throw(targetDir, _parameter.AttackPower);
     }
 
     protected override void OnCreated()
