@@ -276,9 +276,6 @@ public class Player : MonoSingleton<Player>
 
             if (_attackMotionTime <= 0f)
             {
-                // 画像を攻撃状態から戻す
-                ResetSprite();
-
                 // すべてのモーションの他アニメーションによる制約を削除
                 SetAllActionRestrictionState(false);
             }
@@ -322,9 +319,6 @@ public class Player : MonoSingleton<Player>
                 {
                     if (_attackMotionTime > 0)
                     {
-                        // 画像を通常状態へ
-                        ResetSprite();
-
                         _attackMotionTime = 0f;
                         SetAllActionRestrictionState(false);
                         _playerAttack.FinishAttack();
@@ -405,11 +399,14 @@ public class Player : MonoSingleton<Player>
             _attackMotionTime = 0f;
             SetAllActionRestrictionState(false);
             _playerAttack.FinishAttack();
+        }
 
-            // 画像を通常状態へ
+        _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
+
+        if (_attackMotionTime <= 0f)
+        {
             ResetSprite();
         }
-        _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
     }
 
     public void GetItem(int itemId)
