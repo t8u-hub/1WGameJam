@@ -510,16 +510,16 @@ public class Player : MonoSingleton<Player>
             _actionEnableStateDict[(ActionType)weapon.Type + 1].ReleaseAction();
 
 
-            var leastWeaponLevel = _equipWeaponDict.Select(data =>
+            var maxWeaponLevel = _equipWeaponDict.Select(data =>
                 {
                     if (data.Value == null) return 0;
                     return data.Value.Level;
                 })
-                .OrderBy(item => item)
+                .OrderByDescending(item => item)
                 .First();
 
-            // 最小の武器LvといまのキャラLvが等しければレベルアップ
-            return (_charaLevel < 3) && leastWeaponLevel > _charaLevel;
+            // 最大の武器LvがいまのキャラLvより大きければレベルアップ
+            return (_charaLevel < 3) && maxWeaponLevel > _charaLevel;
         }
 
         return false;

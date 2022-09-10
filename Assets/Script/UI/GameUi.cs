@@ -15,6 +15,9 @@ public class GameUi : UiBase
     [SerializeField]
     private CutinPlayer _cutinPlayer;
 
+    [SerializeField]
+    private DamageText _scoreText;
+
     /// <summary>
     /// 必殺技ゲージ
     /// </summary>
@@ -90,6 +93,12 @@ public class GameUi : UiBase
 
     public void Update()
     {
+        if (BattleManager.Instance == null || BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
+        _scoreText.SetValue(BattleManager.Instance.CurrentScore);
         _attackGauge.value = BattleManager.Instance.CurrentGauge;
     }
 

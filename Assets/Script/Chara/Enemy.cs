@@ -341,7 +341,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void OnDamage(int hitCount, int amount)
+    public void OnDamage(int hitCount, int amount, bool isSpecial = false)
     {
         _hp -= amount * hitCount;
 
@@ -349,7 +349,7 @@ public class Enemy : MonoBehaviour
         damageText.PlayDamageTextAnimation(amount, hitCount, _imageTransform.transform.localScale.x < 0);
 
         // 与えたダメージ量だけゲージ上昇
-        BattleManager.Instance.GaugeUp(hitCount * amount);
+        BattleManager.Instance.PlayerAttack(hitCount * amount, isSpecial);
         if (_hp <= 0)
         {
             _destroyAnimation.Play();

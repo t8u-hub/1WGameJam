@@ -72,6 +72,8 @@ public class BattleManager : MonoBehaviour
 
     private float _noDamageTimer;
 
+    private float _pastTime;
+
     void Awake()
     {
         if (_instance == null)
@@ -90,10 +92,12 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_playGame)
+        if (!_playGame || StopUpdate)
         {
             return;
         }
+
+        _pastTime += Time.deltaTime;
 
         _noDamageTimer += Time.deltaTime;
         if(_noDamageTimer > 3f && ScaledTotalDamage > 0)
@@ -180,8 +184,27 @@ public class BattleManager : MonoBehaviour
     /// ゲージ上昇量
     /// </summary>
     /// 引数はエネミーが受けたダメージ
-    public void GaugeUp(int damage)
+    public void PlayerAttack(int damage, bool isSpecialAttack)
     {
+        // スコア上昇
+        {
+            var specialScale = isSpecialAttack ? 2 : 1;
+            if (_pastTime < 300f) // 経過時間が5分未満なら1倍
+            {
+                CurrentScore += (int)(specialScale * damage);
+            }
+            else if (_pastTime < 600f)
+            {
+                var timeScale = (_pastTime - 300f) / 300f;
+                CurrentScore += (int)(specialScale * timeScale * damage);
+            }
+            else // 経過時間が10分未満なら.5倍
+            {
+                CurrentScore += (int)(specialScale * damage * .5f);
+            }
+        }
+
+        // ゲージ上昇
         CurrentGauge += (float)damage / _battleWaveModel.CurrentWaveData.GaugeCoef; // 値がめちゃ大きくなりそうなのでスケールかけとく
 
         if (CurrentGauge > MAX_GAUGE_VALUE)
@@ -190,6 +213,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 敵の攻撃（プレイヤーが敵から攻撃を受けたときの処理）
+    /// </summary>
     public void EnemyAttack(float damage, float posX)
     {
         if (_player.InNoDamageTime)
@@ -219,7 +245,7 @@ public class BattleManager : MonoBehaviour
 
         foreach(var enemy in _enemyList)
         {
-            enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef));
+            enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef), true);
         }
         CurrentGauge = 0;
     }
