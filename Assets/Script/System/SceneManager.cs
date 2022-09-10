@@ -7,8 +7,13 @@ public class SceneManager : MonoSingleton<SceneManager>
 {
 
     private SceneDefine.Scene _currentScene;
-
     private bool _isChangeing = false;
+
+    public SceneData GetCurrentSceneData()
+    {
+        var currentSceneController = SceneDefine.SCENE_CONTROLLER_DICT[_currentScene];
+        return currentSceneController;
+    }
 
     public void ChangeScene(SceneDefine.Scene nextScene)
     {
