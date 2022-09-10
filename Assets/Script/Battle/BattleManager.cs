@@ -221,5 +221,6 @@ public class BattleManager : MonoBehaviour
         {
             enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef));
         }
+        CurrentGauge = 0;
     }
 }

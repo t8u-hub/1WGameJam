@@ -438,7 +438,6 @@ public class Player : MonoSingleton<Player>
         if (EnableSpecialAttack())
         {
             BattleManager.Instance.SpecialAttack();
-            Debug.Log("必殺技が打てます");
         }
 
         if (_attackMotionTime <= 0f)
