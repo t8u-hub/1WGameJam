@@ -12,6 +12,9 @@ public class GameUi : UiBase
     [SerializeField]
     private WeaponIconUi[] _weaponIconDict;
 
+    [SerializeField]
+    private CutinPlayer _cutinPlayer;
+
     /// <summary>
     /// 必殺技ゲージ
     /// </summary>
@@ -88,5 +91,11 @@ public class GameUi : UiBase
     public void Update()
     {
         _attackGauge.value = BattleManager.Instance.CurrentGauge;
+    }
+
+    public void PlayCutin(int charaLevel)
+    {
+        var cutin = Instantiate<CutinPlayer>(_cutinPlayer, transform);
+        cutin.PlayCutin(charaLevel);
     }
 }

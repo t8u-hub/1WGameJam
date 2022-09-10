@@ -1479,6 +1479,8 @@ MonoBehaviour:
   - {fileID: 7245199214639267617}
   - {fileID: 4132475682770181398}
   - {fileID: 9190602113372231232}
+  _cutinPlayer: {fileID: 3687700297406069822, guid: 30aa4a64f25cb9f4c9e8c27da7751ad8,
+    type: 3}
   _attackGauge: {fileID: 4096351214696105356}
 --- !u!1 &8800782049926173653
 GameObject:

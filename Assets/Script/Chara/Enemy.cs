@@ -132,6 +132,11 @@ public class Enemy : MonoBehaviour
 
     public void Update()
     {
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
         if (_state == State.Knockback)
         {
             // ノックバック中は状態更新が何もできないようにする
@@ -245,6 +250,11 @@ public class Enemy : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
         FixedUpdateInner();
     }
 

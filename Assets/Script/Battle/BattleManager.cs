@@ -8,7 +8,11 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 必殺技ゲージの上限値
     /// </summary>
-    public static float MAX_GAUGE_VALUE = 100f;
+    public static float MAX_GAUGE_VALUE = 1f;
+
+    private static Color32 SPECIAL_ATTACK_FADE_COLOR = new Color32(0, 0, 0, 128);
+
+    public bool StopUpdate { get; private set; } = false;
 
     protected static BattleManager _instance = null;
     public static BattleManager Instance => _instance;
@@ -199,5 +203,25 @@ public class BattleManager : MonoBehaviour
         ScaledTotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
 
         _noDamageTimer = 0;
+    }
+
+    public void SpecialAttack()
+    {
+        StartCoroutine(SpecialAttackInner());
+    }
+
+    private IEnumerator SpecialAttackInner()
+    {
+        StopUpdate = true;
+
+        _gameUi.PlayCutin(_player.CharaLevel);
+        yield return new WaitForSecondsRealtime(1.2f);
+
+        StopUpdate = false;
+
+        foreach(var enemy in _enemyList)
+        {
+            enemy.OnDamage(1, 123);
+        }
     }
 }

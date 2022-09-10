@@ -1,10 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
+    private  Color32 WHITE = new Color32(255, 255, 255, 255);
+
     public enum UiType
     {
         Normal,
@@ -64,8 +66,16 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void FadeOut(System.Action onComplete)
     {
+        _fadeAnimator.SetColor(WHITE);
         _fadeAnimator.PlayFade(0, 1, onComplete);
     }
+
+    public void FadeOut(System.Action onComplete, Color32 color)
+    {
+        _fadeAnimator.SetColor(color);
+        _fadeAnimator.PlayFade(0, 1, onComplete);
+    }
+
 
     public void LockGameCanvas()
     {
