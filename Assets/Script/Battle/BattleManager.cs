@@ -152,14 +152,14 @@ public class BattleManager : MonoBehaviour
         CurrentGauge += (float)damage / ( _battleWaveModel.CurrentWaveData.GaugeCoef * 1000f); // 値がめちゃ大きくなりそうなのでスケールかけとく
     }
 
-    public void EnemyAttack(float damage)
+    public void EnemyAttack(float damage, float posX)
     {
         if (_player.InNoDamageTime)
         {
             return;
         }
 
-        _player.OnDamage();
+        _player.OnDamage(posX);
         TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
         Debug.Log($"総ダメージ{TotalDamage}");
 

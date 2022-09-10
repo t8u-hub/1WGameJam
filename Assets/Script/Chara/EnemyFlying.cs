@@ -104,7 +104,7 @@ public class EnemyFlying : Enemy
             {
                 _state = State.Attack;
                 _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
+                BattleManager.Instance.EnemyAttack(_parameter.AttackPower, transform.position.x);
                 return true;
             }
             else
@@ -125,14 +125,21 @@ public class EnemyFlying : Enemy
         _defaultHeight = Random.Range(50f, 150f);
 
         _state = State.Default;
-        _image.sprite = _imageArray[(int)_state];
+        _image.sprite = _imageArray[(int)State.Idle];
     }
 
     protected override void OnStartDefaultMotion()
     {
         _state = State.Default;
-        _image.sprite = _imageArray[(int)_state];
+        _image.sprite = _imageArray[(int)State.Idle];
     }
+
+    protected override void OnStartChaseMotion()
+    {
+        _state = State.Move;
+        _image.sprite = _imageArray[(int)State.Idle];
+    }
+
 
     /// <summary>
     /// いまのモーションに残り時間がまだあるときのUpdate処理

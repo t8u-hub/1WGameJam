@@ -121,4 +121,13 @@ public static class CsvDefine
             VerticalMove = 5,       // 降下攻撃
         }
     }
+
+    public static class EnemyAction
+    {
+        public const string PATH = "enemy_action_data";
+
+        public const string ENEMY_ID = "enemy_id";
+        public const string MOVE_WEIGHT = "move_weight";
+        public const string STOP_WEIGHT = "move_weight";
+    }
 }

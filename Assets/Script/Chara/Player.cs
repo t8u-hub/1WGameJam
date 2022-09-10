@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class Player : MonoSingleton<Player>
 {
-    protected Vector3 IMG_DEFAULT = new Vector3(1, 1, 1);
-    protected Vector3 IMG_FLIP = new Vector3(-1, 1, 1);
+    public static readonly Vector3 IMG_DEFAULT = new Vector3(1, 1, 1);
+    public static readonly Vector3 IMG_FLIP = new Vector3(-1, 1, 1);
 
     #region Class, enum
 
@@ -429,9 +429,12 @@ public class Player : MonoSingleton<Player>
 
     }
 
-    public void OnDamage()
+    public void OnDamage(float posX)
     {
         _noDamageTime = _attackSetting.NoDamageTime;
+
+        // 攻撃が飛んできた方向を向く
+        _playerPositionController.SetPlayerDirection(posX >= transform.position.x);
         
         // 念のためリセット
         _attackMotionTime = 0f;

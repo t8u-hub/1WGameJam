@@ -6,12 +6,12 @@ public class Enemy : MonoBehaviour
     protected enum State
     {
         Idle,    // 静止
-        Move,       // プレイヤーに向かって動く
         Attack,     // 攻撃
         Damaging,     // 被ダメ
-        Default,       // 巡回
+        Move,       // プレイヤーに向かって動く
 
-        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）
+        Default,       // 巡回 絵はIdleと一緒
+        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）絵はdamagingと一緒
     }
 
     /// <summary>
@@ -79,6 +79,9 @@ public class Enemy : MonoBehaviour
         public float MoveSpeed;
         public float AttackPower;
         public int DropItemId;
+
+        public int MoveWeight;
+        public int StopWeight;
     }
 
     public static Enemy CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
@@ -161,8 +164,8 @@ public class Enemy : MonoBehaviour
         }
 
         // TODO: 確率と時間はCSVから読む
-        var rand = Random.Range(0, 100);
-        if (rand < 50)
+        var rand = Random.Range(0, _parameter.MoveWeight + _parameter.StopWeight);
+        if (rand < _parameter.StopWeight)
         {
             // 停止 or 旋回処理
             OnStartDefaultMotion();
@@ -208,7 +211,7 @@ public class Enemy : MonoBehaviour
             {
                 _state = State.Attack;
                 _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
+                BattleManager.Instance.EnemyAttack(_parameter.AttackPower, transform.position.x);
                 return true;
             }
             else
