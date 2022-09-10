@@ -183,7 +183,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 70cefe342dbd1b34583db4721e41b7c5, type: 3}
   - {fileID: 21300000, guid: 59ef35c87c59ac144a610d93ec66b0fc, type: 3}
   _imageTransform: {fileID: 7302028960358875232}
-  _damageText: {fileID: 2573675508876700816, guid: 783b92428e0a491409a3737be1def3dc,
+  _damageText: {fileID: 112984632238758523, guid: 9272f2cc3f7782445bbde320a6c0c877,
     type: 3}
   _destroyAnimation: {fileID: 5366404594465289169}
   _attackArea: {fileID: 8142622349224491650}

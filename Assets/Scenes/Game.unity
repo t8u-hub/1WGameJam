@@ -316,6 +316,7 @@ MonoBehaviour:
   - {x: 0, y: 300}
   - {x: 40, y: 367}
   - {x: 80, y: 450}
+  _bgImage: {fileID: 1739464027}
 --- !u!4 &1337521042
 Transform:
   m_ObjectHideFlags: 0
