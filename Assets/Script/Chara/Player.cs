@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class Player : MonoSingleton<Player>
 {
-    protected Vector3 IMG_DEFAULT = new Vector3(1, 1, 1);
-    protected Vector3 IMG_FLIP = new Vector3(-1, 1, 1);
+    public static readonly Vector3 IMG_DEFAULT = new Vector3(1, 1, 1);
+    public static readonly Vector3 IMG_FLIP = new Vector3(-1, 1, 1);
 
     #region Class, enum
 
@@ -164,7 +164,11 @@ public class Player : MonoSingleton<Player>
     /// </summary>
     private float _noDamageTime = 0f;
 
+    /// <summary>
+    /// レベル
+    /// </summary>
     private int _charaLevel = 1;
+    public int CharaLevel => _charaLevel;
 
     public bool InAttacking
     {
@@ -175,6 +179,16 @@ public class Player : MonoSingleton<Player>
     }
 
     public bool InNoDamageTime => _noDamageTime > 0f;
+
+    public void LevelUp()
+    {
+        if (_charaLevel < 3)
+        {
+            _charaLevel += 1;
+        }
+
+        ResetSprite();
+    }
 
     private void Awake()
     {
@@ -409,13 +423,17 @@ public class Player : MonoSingleton<Player>
         }
     }
 
-    public void GetItem(int itemId)
+    /// <summary>
+    /// アイテム獲得処理
+    /// </summary>
+    /// <returns> レベルアップするか </returns>
+    public bool GetItem(int itemId)
     {
         var weapon = _weaponList.Find(weapon => weapon.Id == itemId);
         if (weapon == null)
         {
             Debug.LogError($"存在しない武器ID{itemId}");
-            return;
+            return false;
         }
 
         var attackType = (CsvDefine.ActionData.AttackType)weapon.Type;
@@ -425,13 +443,29 @@ public class Player : MonoSingleton<Player>
             _equipWeaponDict[attackType] = weapon;
             // CsvDefine.ActionData.AttackType からActionTypeへキャストするため＋1する
             _actionEnableStateDict[(ActionType)weapon.Type + 1].ReleaseAction();
+
+
+            var leastWeaponLevel = _equipWeaponDict.Select(data =>
+                {
+                    if (data.Value == null) return 0;
+                    return data.Value.Level;
+                })
+                .OrderBy(item => item)
+                .First();
+
+            // 最小の武器LvといまのキャラLvが等しければレベルアップ
+            return (_charaLevel < 3) && leastWeaponLevel == _charaLevel;
         }
 
+        return false;
     }
 
-    public void OnDamage()
+    public void OnDamage(float posX)
     {
         _noDamageTime = _attackSetting.NoDamageTime;
+
+        // 攻撃が飛んできた方向を向く
+        _playerPositionController.SetPlayerDirection(posX >= transform.position.x);
         
         // 念のためリセット
         _attackMotionTime = 0f;

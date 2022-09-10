@@ -140,11 +140,29 @@ public class BattleManager : MonoBehaviour
             // アイテムをドロップする敵が死んだときの処理
             if (enemy.DropItemId != 0)
             {
-                Debug.Log($"獲得アイテム：{enemy.DropItemId}");
-                _player.GetItem(enemy.DropItemId);
+                var isLevelUp = _player.GetItem(enemy.DropItemId);
                 _gameUi.UpdateItemUiIfNeed(enemy.DropItemId);
+
+                // レベルが上がるときの処理
+                if (isLevelUp)
+                {
+                    OnLevelUp();
+                }
             }
         }
+    }
+
+    public void OnLevelUp()
+    {
+        var sceneManager = SceneManager.Instance.GetCurrentSceneData() as GameSceneController;
+        if (sceneManager == null)
+        {
+            Debug.LogError("シーンコントローラーが見つからない");
+            return;
+        }
+
+        _player.LevelUp();
+        sceneManager.ChangeStageLevel(_player.CharaLevel);
     }
 
     public void GaugeUp(int damage)
@@ -152,14 +170,14 @@ public class BattleManager : MonoBehaviour
         CurrentGauge += (float)damage / ( _battleWaveModel.CurrentWaveData.GaugeCoef * 1000f); // 値がめちゃ大きくなりそうなのでスケールかけとく
     }
 
-    public void EnemyAttack(float damage)
+    public void EnemyAttack(float damage, float posX)
     {
         if (_player.InNoDamageTime)
         {
             return;
         }
 
-        _player.OnDamage();
+        _player.OnDamage(posX);
         TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
         Debug.Log($"総ダメージ{TotalDamage}");
 

@@ -15,6 +15,14 @@ public class EnemySpawner : MonoBehaviour
         public int Hit;
         public float Speed;
         public int DropItemId;
+        public float WaitTime;
+    }
+
+    class EnemyActionWeight
+    {
+        public int EnemyId;
+        public int WeightMove;
+        public int WeithtStop;
     }
 
     [SerializeField]
@@ -36,6 +44,9 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     private List<EnemyDefaultInfo> _enemyInfoList;
 
+
+    private List<EnemyActionWeight> _enemyActionWeightList;
+
     public void CreateData()
     {
         // 敵のマスターデータ読む
@@ -52,6 +63,7 @@ public class EnemySpawner : MonoBehaviour
                 Hit = enemyData[CsvDefine.EnemyData.HIT_NUM],
                 Speed = (float)enemyData[CsvDefine.EnemyData.SPEED] / CsvDefine.INT2FLOAT,
                 DropItemId = enemyData[CsvDefine.EnemyData.DROP_ITEM_ID],
+                WaitTime = enemyData[CsvDefine.EnemyData.WAIT_TIME] / 1000f, // ミリ秒で数値が入ってる
             };
             _enemyInfoList.Add(enemyInfo);
         }
@@ -66,6 +78,15 @@ public class EnemySpawner : MonoBehaviour
             var damamgeCoef = (float)coefData[CsvDefine.EnemyCoef.DAMEGE_COEF] / CsvDefine.INT2FLOAT;
             _enemyCoefDict.Add(wave, (damamgeCoef, speedCoef));
         }
+
+        _enemyActionWeightList = new CsvReader().Create(CsvDefine.EnemyAction.PATH).CsvData
+            .Select(data => new EnemyActionWeight
+            {
+                EnemyId = data[CsvDefine.EnemyAction.ENEMY_ID],
+                WeightMove = data[CsvDefine.EnemyAction.MOVE_WEIGHT] / 100,
+                WeithtStop = data[CsvDefine.EnemyAction.STOP_WEIGHT] / 100,
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -78,6 +99,13 @@ public class EnemySpawner : MonoBehaviour
         if (masterEnemyData == null)
         {
             Debug.LogError($"enemy_data.csvにIdが{info.EnemyId}のデータがない");
+            return null;
+        }
+
+        var masterEnemyAction = _enemyActionWeightList.Find(enemy => enemy.EnemyId == info.EnemyId);
+        if (masterEnemyAction == null)
+        {
+            Debug.LogError($"enemy_action_data.csvにIdが{info.EnemyId}のデータがない");
             return null;
         }
 
@@ -105,6 +133,9 @@ public class EnemySpawner : MonoBehaviour
             MoveSpeed = masterEnemyData.Speed * coefData.SpeedCoef,
             AttackPower = masterEnemyData.Attack * coefData.DamegeCoef,
             DropItemId = masterEnemyData.DropItemId,
+            MoveWeight = masterEnemyAction.WeightMove,
+            StopWeight = masterEnemyAction.WeithtStop,
+            WaitTime = masterEnemyData.WaitTime,
         };
 
         Enemy enemy;
