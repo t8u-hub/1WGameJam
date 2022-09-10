@@ -12,13 +12,12 @@ public class MoonBlur : MonoBehaviour
     [SerializeField]
     private float _alphaMin = 0; // ブラーの最小のα値 (0~1)
 
-    void Start()
+    private void Start()
     {
         _image = gameObject.GetComponent<Image>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         float alpha = _alphaMin + (_alphaMax - _alphaMin) * Mathf.Sin(_frequency * Time.time);
         _image.color = new Color(1, 1, 1, alpha);

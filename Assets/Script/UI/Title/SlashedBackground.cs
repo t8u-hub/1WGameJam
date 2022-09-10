@@ -5,18 +5,19 @@ using Cysharp.Threading.Tasks;
 public class SlashedBackground : UiBase
 {
     [SerializeField]
-    private readonly Vector3 _targetPosition;
+    private float _moveX;
+    [SerializeField]
+    private float _moveY;
+    [SerializeField]
+    private int _duration; // 移動にかける時間(ms)
 
     // private RectTransform _rectTransform;
     public override void Initialize()
     {
     }
 
-    /// <summary>
-    /// 自身の RectTransform を _targetPosition まで duration ミリ秒かけて移動する
-    /// </summary>
-    /// <param name="duration">移動にかける時間</param>
-    public async UniTask MoveSelf(int duration)
+    // 自身の RectTransform を _targetPosition まで _duration ミリ秒かけて移動する
+    public async UniTask MoveSelf()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         Vector3 initialPosition = rectTransform.position;
@@ -26,21 +27,16 @@ public class SlashedBackground : UiBase
         int frameRate = 40;
 
         // rectTransform を移動する回数
-        int loopTime = (int)Mathf.Ceil(duration / frameRate);
+        int loopTime = (int)Mathf.Ceil(_duration / frameRate);
 
         // 一度に移動する距離
-        float deltaX = (_targetPosition.x - initialPosition.x) / loopTime;
-        float deltaY = (_targetPosition.y - initialPosition.y) / loopTime;
-        float deltaZ = (_targetPosition.z - initialPosition.z) / loopTime;
+        float deltaX = _moveX / loopTime;
+        float deltaY = _moveY / loopTime;
 
-        for (int i = 0; i < loopTime - 1; i++)
+        for (int i = 0; i < loopTime; i++)
         {
-            rectTransform.position += new Vector3(deltaX, deltaY, deltaZ);
-
-            // 待つ
+            rectTransform.position += new Vector3(deltaX, deltaY, 0);
             await UniTask.Delay(frameRate);
         }
-        // 最後は強制的に targetColor にする
-        rectTransform.position = _targetPosition;
     }
 }

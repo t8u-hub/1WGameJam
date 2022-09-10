@@ -12,17 +12,27 @@ public class TitleUi : UiBase
     private GameObject _initialObjects;
     [SerializeField]
     private GameObject _slashedEffectObjects;
+    [SerializeField]
+    private SlashEffect _slashEffect;
+    [SerializeField]
+    private SlashedBackground _slashedBackground;
 
     // スペースキーを押され続けている時間(sec)
     private float _timePressed = 0.0f;
 
     public override async void Initialize()
     {
-        // 画面が切れるエフェクト用の画像は最初は表示しない
+        // 最初に表示するオブジェクト
+        _faderPanel.gameObject.SetActive(true);
+        _initialObjects.SetActive(true);
+        _titleLogo.SetActive(true);
+        // 最初に表示しないオブジェクト
         _slashedEffectObjects.SetActive(false);
 
         int waitTimeForFadeIn = 2000; // フェードインにかける時間(ms)
+        Debug.Log(Time.time);
         await _faderPanel.Fade(new Color(0, 0, 0, 1), new Color(0, 0, 0, 0), waitTimeForFadeIn);
+        Debug.Log(Time.time);
 
         // 竹を揺らす & 月の明るさを変える & 竹の光芒が回る
 
@@ -30,8 +40,13 @@ public class TitleUi : UiBase
         float timeToPressSpace = 2.0f;
         await UniTask.WaitUntil(() => CountUpWhilePressed(timeToPressSpace));
 
-        // 最初に表示されていた画像を全て消して、画面が切れるエフェクトに移行する
+        // 画面が切れるエフェクト
+        await _slashEffect.ChangeFillAmount();
+
+        // 最初に表示されていた画像を全て消して、切られた画像を表示する
         ChangeImages();
+
+        await _slashedBackground.MoveSelf();
     }
 
     /// <param name="threshold">このメソッドが true を返すためにスペースキーを押し続ける時間(sec)</param>
