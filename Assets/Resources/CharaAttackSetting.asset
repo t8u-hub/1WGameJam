@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4344e4882875b304f8a63afb05191421, type: 3}
+  m_Name: CharaAttackSetting
+  m_EditorClassIdentifier: 
+  _attackInfoArray:
+  - NormalAttack:
+      HitArea: {x: 50, y: 90}
+      RigidityTime: 0.1
+    HorizontalMoveAttack:
+      HitArea: {x: 40, y: 60}
+      MaxLastTime: 0.15
+      MoveSpeed: 750
+    MiddleDistanceAttack:
+      HitArea: {x: 0, y: 60, z: 0}
+      ThrowPich: 45
+      ThrowSpeed: 800
+      RigidityTime: 0.1
+    LongRangeAttack:
+      HitArea: {x: 200, y: 60}
+      RigidityTime: 0.2
+    VerticalMoveAttack:
+      HitArea: {x: 240, y: 60}
+      RigidityTime: 0.1
+      MoveSpeed: 1200
+  _rigidityTime: 0.1
+  _noDamageTime: 0.5

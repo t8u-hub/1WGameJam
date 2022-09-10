@@ -43,18 +43,33 @@ public class PlayerAttack : MonoBehaviour
         _hitCount = 0;
     }
 
-    /// <summary>
-    /// 通常攻撃
-    /// </summary>
-
-    public void AttackNormal(int hit, int damage)
+    public void ResetCollider()
     {
         // 使うコライダー
         _boxCollider.enabled = true;
 
         // 範囲
-        _boxCollider.size = new Vector2(40, 60);
-        _boxCollider.offset = new Vector2(-20, 0);
+        _boxCollider.size = new Vector2(0, 0);
+        _boxCollider.offset = new Vector2(0, 0);
+
+        _boxCollider.enabled = false;
+    }
+
+
+    /// <summary>
+    /// 通常攻撃
+    /// </summary>
+
+    public void AttackNormal(int hit, int damage, Vector2 collisitonSize)
+    {
+        ResetCollider();
+
+        // 範囲
+        _boxCollider.size = collisitonSize;
+        _boxCollider.offset = new Vector2(-collisitonSize.x / 2, collisitonSize.y / 2);
+
+        // 使うコライダー
+        _boxCollider.enabled = true;
 
         // ダメージとヒット数
         _damageAmount = damage;
@@ -68,44 +83,48 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// 移動攻撃
     /// </summary>
-    public void AttackHorizontalMove(int hit, int damage)
+    public void AttackHorizontalMove(int hit, int damage, Vector2 collisitonSize, float lastTime)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
         // 範囲
-        _boxCollider.size = new Vector2(40, 60);
-        _boxCollider.offset = new Vector2(0, 0);
+        _boxCollider.size = collisitonSize;
+        _boxCollider.offset = new Vector2(0, collisitonSize.y / 2);
 
         // ダメージとヒット数
         _damageAmount = damage;
         _hitCount = hit;
 
         // 持続時間
-        _attackLastTime = .5f;
+        _attackLastTime = lastTime;
     }
 
     /// <summary>
     /// 遠距離攻撃
     /// </summary>
-    public void AttackMiddleDistance(int hit, int damage, Transform parent)
+    public void AttackMiddleDistance(int hit, int damage, Transform parent, Vector3 offset, float ballSpeed, float ballAngle)
     {
         var ball = GameObject.Instantiate<AttackBall>(_attackBall, parent);
-        ball.transform.position = transform.position + new Vector3(0, 18, 0);
-        ball.Throw(hit, damage, transform.parent.localScale.x < 0);
+        ball.transform.position = transform.position + offset;
+        ball.Throw(ballSpeed, ballAngle, hit, damage, transform.parent.localScale.x < 0);
     }
 
     /// <summary>
     /// 広範囲攻撃
     /// </summary>
-    public void AttackLongRange(int hit, int damage)
+    public void AttackLongRange(int hit, int damage, Vector2 collisitonSize)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
         // 範囲
-        _boxCollider.size = new Vector2(200, 60);
-        _boxCollider.offset = new Vector2(-100, 0);
+        _boxCollider.size = collisitonSize;
+        _boxCollider.offset = new Vector2(-collisitonSize.x / 2, collisitonSize.y / 2);
 
         // ダメージとヒット数
         _damageAmount = damage;
@@ -118,14 +137,16 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// 降下攻撃
     /// </summary>
-    public void AttackVerticalMove(int hit, int damage)
+    public void AttackVerticalMove(int hit, int damage, Vector2 collisitonSize)
     {
+        ResetCollider();
+
         // 使うコライダー
         _boxCollider.enabled = true;
 
         // 範囲
-        _boxCollider.size = new Vector2(240, 60);
-        _boxCollider.offset = new Vector2(0, 0);
+        _boxCollider.size = collisitonSize;
+        _boxCollider.offset = new Vector2(0, collisitonSize.y / 2);
 
         // ダメージとヒット数
         _damageAmount = damage;
@@ -140,9 +161,11 @@ public class PlayerAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             var enemy = collision.transform.GetComponent<Enemy>();
-            enemy?.OnDamage(_hitCount, _damageAmount);
+            var damage = (int)(BattleManager.Instance.PlayerAttackCoef *(float)_damageAmount);
+            enemy?.OnDamage(_hitCount, damage);
         }
     }
+
 
     public void FinishAttack()
     {

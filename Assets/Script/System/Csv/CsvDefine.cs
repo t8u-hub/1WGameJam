@@ -55,6 +55,7 @@ public static class CsvDefine
         public const string HIT_NUM = "hit";
         public const string SPEED = "speed";
         public const string DROP_ITEM_ID = "item";
+        public const string WAIT_TIME = "wait_time";
     }
 
     /// <summary>
@@ -64,7 +65,7 @@ public static class CsvDefine
     {
         public const string PATH = "enemy_coef";
 
-        public const string WAVE = "flag";
+        public const string WAVE = "wave";
         public const string DAMEGE_COEF = "dmgcoef";
         public const string SPEED_COEF = "speedcoef";
     }
@@ -120,5 +121,14 @@ public static class CsvDefine
             LongRange = 4,          // 広範囲攻撃
             VerticalMove = 5,       // 降下攻撃
         }
+    }
+
+    public static class EnemyAction
+    {
+        public const string PATH = "enemy_action_data";
+
+        public const string ENEMY_ID = "enemy_id";
+        public const string MOVE_WEIGHT = "move_weight";
+        public const string STOP_WEIGHT = "move_weight";
     }
 }

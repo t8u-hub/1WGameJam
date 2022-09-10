@@ -6,7 +6,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     protected static T _instance = null;
     public static T Instance => _instance;
 
-    void Awake()
+    void Start()
     {
         if (_instance == null)
         {
@@ -18,5 +18,4 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
             Destroy(this.gameObject);
         }
     }
-
 }
