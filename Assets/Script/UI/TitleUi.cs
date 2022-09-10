@@ -47,6 +47,8 @@ public class TitleUi : UiBase
         ChangeImages();
 
         await _slashedBackground.MoveSelf();
+        await _faderPanel.Fade(new Color(0, 0, 0, 0), new Color(1, 1, 1, 1), waitTimeForFadeIn);
+        SceneManager.Instance.ChangeScene(SceneDefine.Scene.Game);
     }
 
     /// <param name="threshold">このメソッドが true を返すためにスペースキーを押し続ける時間(sec)</param>
