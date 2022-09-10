@@ -5,10 +5,18 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    /// <summary>
+    /// 必殺技ゲージの上限値
+    /// </summary>
+    public static float MAX_GAUGE_VALUE = 100f;
 
     protected static BattleManager _instance = null;
     public static BattleManager Instance => _instance;
 
+    /// <summary>
+    /// 必殺技が使えるかどうか
+    /// </summary>
+    public bool CanUseSpecialAttack => CurrentGauge >= MAX_GAUGE_VALUE;
 
     [SerializeField]
     private Player _playerPrefab;
@@ -32,9 +40,9 @@ public class BattleManager : MonoBehaviour
     public float CurrentGauge { get; private set; }
 
     /// <summary>
-    /// 現在のプレイヤー累積ダメージ
+    /// 現在のプレイヤー累積ダメージ (実際の値の1/1000)
     /// </summary>
-    public float TotalDamage { get; private set; }
+    public float ScaledTotalDamage { get; private set; }
 
     /// <summary>
     /// 現在のスコア
@@ -86,11 +94,11 @@ public class BattleManager : MonoBehaviour
         }
 
         _noDamageTimer += Time.deltaTime;
-        if(_noDamageTimer > 3f && TotalDamage > 0)
+        if(_noDamageTimer > 3f && ScaledTotalDamage > 0)
         {
             // 仮　1秒で２回復する想定
             var recoverAmount = 2 * Time.deltaTime;
-            TotalDamage = Mathf.Max(0, TotalDamage - recoverAmount);
+            ScaledTotalDamage = Mathf.Max(0, ScaledTotalDamage - recoverAmount);
         }
 
         _battleWaveModel.UpdateWaveModel();
@@ -165,9 +173,19 @@ public class BattleManager : MonoBehaviour
         sceneManager.ChangeStageLevel(_player.CharaLevel);
     }
 
+
+    /// <summary>
+    /// ゲージ上昇量
+    /// </summary>
+    /// 引数はエネミーが受けたダメージ
     public void GaugeUp(int damage)
     {
-        CurrentGauge += (float)damage / ( _battleWaveModel.CurrentWaveData.GaugeCoef * 1000f); // 値がめちゃ大きくなりそうなのでスケールかけとく
+        CurrentGauge += (float)damage / _battleWaveModel.CurrentWaveData.GaugeCoef; // 値がめちゃ大きくなりそうなのでスケールかけとく
+
+        if (CurrentGauge > MAX_GAUGE_VALUE)
+        {
+            CurrentGauge = MAX_GAUGE_VALUE;
+        }
     }
 
     public void EnemyAttack(float damage, float posX)
@@ -178,8 +196,7 @@ public class BattleManager : MonoBehaviour
         }
 
         _player.OnDamage(posX);
-        TotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
-        Debug.Log($"総ダメージ{TotalDamage}");
+        ScaledTotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
 
         _noDamageTimer = 0;
     }

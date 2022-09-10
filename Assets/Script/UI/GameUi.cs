@@ -12,6 +12,9 @@ public class GameUi : UiBase
     [SerializeField]
     private WeaponIconUi[] _weaponIconDict;
 
+    /// <summary>
+    /// 必殺技ゲージ
+    /// </summary>
     [SerializeField]
     private Slider _attackGauge;
 
@@ -46,7 +49,7 @@ public class GameUi : UiBase
         _earnedWeapon.Add(_weaponList.Find(weapon => weapon.Id == 101));
 
         _attackGauge.minValue = 0;
-        _attackGauge.maxValue = 20;
+        _attackGauge.maxValue = BattleManager.MAX_GAUGE_VALUE;
     }
 
     private void OnClickStartButton()
