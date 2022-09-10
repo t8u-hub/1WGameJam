@@ -923,6 +923,7 @@ MonoBehaviour:
   _slashedEffectObjects: {fileID: 9049660579950828589}
   _slashEffect: {fileID: 9039149542136531094}
   _slashedBackground: {fileID: 5162766389407520585}
+  _fadeDuration: 2000
 --- !u!1 &9049660579950828589
 GameObject:
   m_ObjectHideFlags: 0

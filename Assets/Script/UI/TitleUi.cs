@@ -16,6 +16,8 @@ public class TitleUi : UiBase
     private SlashEffect _slashEffect;
     [SerializeField]
     private SlashedBackground _slashedBackground;
+    [SerializeField]
+    private int _fadeDuration; // フェードにかける時間(ms)
 
     // スペースキーを押され続けている時間(sec)
     private float _timePressed = 0.0f;
@@ -29,10 +31,7 @@ public class TitleUi : UiBase
         // 最初に表示しないオブジェクト
         _slashedEffectObjects.SetActive(false);
 
-        int waitTimeForFadeIn = 2000; // フェードインにかける時間(ms)
-        Debug.Log(Time.time);
-        await _faderPanel.Fade(new Color(0, 0, 0, 1), new Color(0, 0, 0, 0), waitTimeForFadeIn);
-        Debug.Log(Time.time);
+        await _faderPanel.Fade(new Color(0, 0, 0, 1), new Color(0, 0, 0, 0), _fadeDuration);
 
         // 竹を揺らす & 月の明るさを変える & 竹の光芒が回る
 
@@ -47,7 +46,7 @@ public class TitleUi : UiBase
         ChangeImages();
 
         await _slashedBackground.MoveSelf();
-        await _faderPanel.Fade(new Color(0, 0, 0, 0), new Color(1, 1, 1, 1), waitTimeForFadeIn);
+        await _faderPanel.Fade(new Color(0, 0, 0, 0), new Color(1, 1, 1, 1), _fadeDuration);
         SceneManager.Instance.ChangeScene(SceneDefine.Scene.Game);
     }
 
