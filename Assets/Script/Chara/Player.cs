@@ -454,7 +454,7 @@ public class Player : MonoSingleton<Player>
                 .First();
 
             // 最小の武器LvといまのキャラLvが等しければレベルアップ
-            return leastWeaponLevel == _charaLevel;
+            return (_charaLevel < 3) && leastWeaponLevel == _charaLevel;
         }
 
         return false;
