@@ -42,6 +42,8 @@ public class PlayerPositionController : MonoBehaviour
     bool _moveLeft = false;
     bool _jump = false;
 
+    private float _currentJumpCount = 0;
+
     private bool _isGround = false;
     public bool IsGround => _isGround;
 
@@ -98,8 +100,9 @@ public class PlayerPositionController : MonoBehaviour
         {
             _jump = false;
 
-            if (_isGround)
+            if (_currentJumpCount < 2)
             {
+                _currentJumpCount += 1;
                 _isGround = false;
                 _acceleration += Vector3.up * _jumpPower;
             }
@@ -194,6 +197,7 @@ public class PlayerPositionController : MonoBehaviour
         if (tag == GROUND)
         {
             _isGround = true;
+            _currentJumpCount = 0;
             var pos = this.transform.position;
             pos.y = collision.transform.position.y;
             this.transform.position = pos;

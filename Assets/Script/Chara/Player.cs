@@ -159,6 +159,18 @@ public class Player : MonoSingleton<Player>
 
     private ActionSpriteState _spriteState = ActionSpriteState.Stop;
 
+    // 必殺技使用判定用ぱらめた
+
+    // 長押し判定の有効時間
+    private float _spaceLongTapTime = 0f;
+
+    /// <summary>
+    /// スペースキーを使ってジャンプ中ならtrue
+    /// </summary>
+    private bool _jumpWithSpace = false;
+
+    //////////////
+
     /// <summary>
     /// 被ダメ時などの無敵時間
     /// </summary>
@@ -417,10 +429,56 @@ public class Player : MonoSingleton<Player>
 
         _playerPositionController.SetPlayerMove(moveRight, moveLeft, jump);
 
+        // 必殺技
+        if (EnableSpecialAttack())
+        {
+            Debug.Log("必殺技が打てます");
+        }
+
         if (_attackMotionTime <= 0f)
         {
             ResetSprite();
         }
+    }
+
+    /// <summary>
+    /// 必殺技を使うかどうか
+    /// </summary>
+    private bool EnableSpecialAttack()
+    {
+        // スペースキー押下のジャンプ中か判定
+        if (!_jumpWithSpace)
+        {
+            if (BattleManager.Instance.CanUseSpecialAttack &&   // 必殺技が使える
+                _actionEnableStateDict[ActionType.Jump].CanExec && // 他との兼ね合い的にジャンプ可能
+                Input.GetKeyDown(KeyCode.Space) && // スペースキー押下
+                _playerPositionController.IsGround) // 物理的にもキャラがジャンプ可能
+            {
+                _spaceLongTapTime = 0f;
+                _jumpWithSpace = true;
+                return false;
+            }
+        }
+        else
+        {
+            if (Input.GetKeyUp(KeyCode.Space) || // スペースキーが放される
+                _attackMotionTime > 0)           // 何か別のモーションが始まる
+            {
+                _jumpWithSpace = false;
+            }
+        }
+
+        if (_jumpWithSpace)
+        {
+            _spaceLongTapTime += Time.deltaTime;
+            if (_spaceLongTapTime > 1f)
+            {
+                _spaceLongTapTime = 0f;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
