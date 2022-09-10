@@ -127,6 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cb3ae25db5e4420b1dc3ac87a5014b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirror: 1
+  _amplitude: 0.05
+  _frequency: 5
 --- !u!1 &7445837247386464304
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,3 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cb3ae25db5e4420b1dc3ac87a5014b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirror: 0
+  _amplitude: 0.05
+  _frequency: 5

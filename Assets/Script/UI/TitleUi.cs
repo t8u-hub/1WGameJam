@@ -5,30 +5,21 @@ using Cysharp.Threading.Tasks;
 public class TitleUi : UiBase
 {
     [SerializeField]
-    private Button _button;
-
-    [SerializeField]
-    private Button _titleButton;
-
-    [SerializeField]
     private FaderPanel _faderPanel;
-
     [SerializeField]
-    private GameObject _bamboos;
-
+    private GameObject _titleLogo;
     [SerializeField]
-    private GameObject _moon;
-
+    private GameObject _initialObjects;
     [SerializeField]
-    private GameObject _background;
+    private GameObject _slashedEffectObjects;
 
     // スペースキーを押され続けている時間(sec)
     private float _timePressed = 0.0f;
 
     public override async void Initialize()
     {
-        _button.onClick.AddListener(() => SceneManager.Instance.ChangeScene(SceneDefine.Scene.Result));
-        _titleButton.onClick.AddListener(() => SceneManager.Instance.ChangeScene(SceneDefine.Scene.Game));
+        // 画面が切れるエフェクト用の画像は最初は表示しない
+        _slashedEffectObjects.SetActive(false);
 
         int waitTimeForFadeIn = 2000; // フェードインにかける時間(ms)
         await _faderPanel.Fade(new Color(0, 0, 0, 1), new Color(0, 0, 0, 0), waitTimeForFadeIn);
@@ -39,8 +30,8 @@ public class TitleUi : UiBase
         float timeToPressSpace = 2.0f;
         await UniTask.WaitUntil(() => CountUpWhilePressed(timeToPressSpace));
 
-        // 各アニメーションを止める
-        StopAnimations();
+        // 最初に表示されていた画像を全て消して、画面が切れるエフェクトに移行する
+        ChangeImages();
     }
 
     /// <param name="threshold">このメソッドが true を返すためにスペースキーを押し続ける時間(sec)</param>
@@ -62,18 +53,11 @@ public class TitleUi : UiBase
         return false;
     }
 
-    private void StopAnimations()
+    private void ChangeImages()
     {
-        // 揺れる竹のアニメーションを停止する
-        BambooImage[] _bambooImages = _bamboos.GetComponentsInChildren<BambooImage>();
-        foreach (BambooImage _bambooImage in _bambooImages)
-        {
-            _bambooImage.StopWaving();
-            _bambooImage.gameObject.SetActive(false);
-        }
-
-        _moon.SetActive(false);
-        _background.SetActive(false);
+        _initialObjects.SetActive(false);
+        _titleLogo.SetActive(false);
+        _slashedEffectObjects.SetActive(true);
     }
 }
 
