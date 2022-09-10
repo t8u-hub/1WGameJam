@@ -6,12 +6,12 @@ public class Enemy : MonoBehaviour
     protected enum State
     {
         Idle,    // 静止
-        Move,       // プレイヤーに向かって動く
         Attack,     // 攻撃
         Damaging,     // 被ダメ
-        Default,       // 巡回
+        Move,       // プレイヤーに向かって動く
 
-        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）
+        Default,       // 巡回 絵はIdleと一緒
+        Knockback,    // ノックバック（被ダメ開始後１Fだけなる）絵はdamagingと一緒
     }
 
     /// <summary>
