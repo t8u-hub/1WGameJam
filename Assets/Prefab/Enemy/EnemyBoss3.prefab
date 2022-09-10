@@ -108,7 +108,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: de005f4c12a2a6a449dee0852ad95caf, type: 3}
   - {fileID: 21300000, guid: 5414d630695f5664c9c5398fa2829c5f, type: 3}
   _imageTransform: {fileID: 7302028960358875232}
-  _damageText: {fileID: 2573675508876700816, guid: 783b92428e0a491409a3737be1def3dc,
+  _damageText: {fileID: 112984632238758523, guid: 9272f2cc3f7782445bbde320a6c0c877,
     type: 3}
   _destroyAnimation: {fileID: 5366404594465289169}
   _attackArea: {fileID: 0}

@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
     protected Transform _imageTransform;
 
     [SerializeField]
-    private DamageText _damageText;
+    private DamageTextPlayer _damageText;
 
     [SerializeField]
     private Animation _destroyAnimation;
@@ -335,15 +335,11 @@ public class Enemy : MonoBehaviour
     {
         _hp -= amount * hitCount;
 
-        for (int i = 0; i < hitCount; i++)
-        {
-            var damageText = GameObject.Instantiate<DamageText>(_damageText, transform);
-            damageText.PlayDamage(amount);
+        var damageText = GameObject.Instantiate<DamageTextPlayer>(_damageText, transform);
+        damageText.PlayDamageTextAnimation(amount, hitCount, _imageTransform.transform.localScale.x < 0);
 
-            // 与えたダメージ量だけゲージ上昇
-            BattleManager.Instance.GaugeUp(hitCount * amount);
-        }
-
+        // 与えたダメージ量だけゲージ上昇
+        BattleManager.Instance.GaugeUp(hitCount * amount);
         if (_hp <= 0)
         {
             _destroyAnimation.Play();
