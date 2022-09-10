@@ -179,9 +179,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _imageArray:
   - {fileID: 21300000, guid: bbe88d11f1acbb044a106a27b79042d0, type: 3}
-  - {fileID: 21300000, guid: f5dcd8072823e704a92f97b1f43f851e, type: 3}
   - {fileID: 21300000, guid: deac7ceeb224ff343a0f07e3034b4a73, type: 3}
   - {fileID: 21300000, guid: cea10e14cca982847b1196894f90b74a, type: 3}
+  - {fileID: 21300000, guid: f5dcd8072823e704a92f97b1f43f851e, type: 3}
   _imageTransform: {fileID: 7302028960358875232}
   _damageText: {fileID: 2573675508876700816, guid: 783b92428e0a491409a3737be1def3dc,
     type: 3}
