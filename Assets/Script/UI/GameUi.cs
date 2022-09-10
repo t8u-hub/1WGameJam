@@ -98,7 +98,6 @@ public class GameUi : UiBase
             return;
         }
 
-        Debug.Log(BattleManager.Instance.CurrentScore);
         _scoreText.SetValue(BattleManager.Instance.CurrentScore);
         _attackGauge.value = BattleManager.Instance.CurrentGauge;
     }
