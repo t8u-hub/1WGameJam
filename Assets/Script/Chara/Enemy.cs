@@ -79,6 +79,9 @@ public class Enemy : MonoBehaviour
         public float MoveSpeed;
         public float AttackPower;
         public int DropItemId;
+
+        public int MoveWeight;
+        public int StopWeight;
     }
 
     public static Enemy CreateObject(Enemy prefab, Parameter paramter, Transform parentTransform)
@@ -161,8 +164,8 @@ public class Enemy : MonoBehaviour
         }
 
         // TODO: 確率と時間はCSVから読む
-        var rand = Random.Range(0, 100);
-        if (rand < 50)
+        var rand = Random.Range(0, _parameter.MoveWeight + _parameter.StopWeight);
+        if (rand < _parameter.StopWeight)
         {
             // 停止 or 旋回処理
             OnStartDefaultMotion();
