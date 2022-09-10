@@ -146,7 +146,7 @@ public class PlayerAttack : MonoBehaviour
 
         // 範囲
         _boxCollider.size = collisitonSize;
-        _boxCollider.offset = new Vector2(0, 0);
+        _boxCollider.offset = new Vector2(0, collisitonSize.y / 2);
 
         // ダメージとヒット数
         _damageAmount = damage;

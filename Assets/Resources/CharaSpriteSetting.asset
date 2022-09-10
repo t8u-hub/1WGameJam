@@ -13,8 +13,16 @@ MonoBehaviour:
   m_Name: CharaSpriteSetting
   m_EditorClassIdentifier: 
   _normalSprite:
-  - {fileID: 106515151839221409, guid: 2b6d6af599a0e48429ff89283a55f09e, type: 3}
+  - {fileID: 21300000, guid: 122fc80502823484e953c5b963473536, type: 3}
+  _runSprite:
+  - {fileID: 21300000, guid: 8d96c635bb5e66f4dbab13706917b27b, type: 3}
+  _jumpSprite:
+  - {fileID: 21300000, guid: b0f1f3b1ce8433c4c9ceb5e3a783ac98, type: 3}
   _damageSprite:
-  - {fileID: 8491771345141762174, guid: 2b6d6af599a0e48429ff89283a55f09e, type: 3}
+  - {fileID: 21300000, guid: 9a11016dd59dc534c81246008d78be7c, type: 3}
   _attackSprite:
-  - {fileID: 1284233699680165311, guid: 2b6d6af599a0e48429ff89283a55f09e, type: 3}
+  - {fileID: 21300000, guid: 81ee26f5a27c6e34a99eb61e237d727a, type: 3}
+  - {fileID: 21300000, guid: 0e7fbc6c89c35e249a76ddd7197b2a13, type: 3}
+  - {fileID: 21300000, guid: 89da4e45205cba540bf5d7b7512b114c, type: 3}
+  - {fileID: 21300000, guid: b96cb77ad451a3b4196c31be461b0654, type: 3}
+  - {fileID: 21300000, guid: db30f11e50b7b614ab13eccec35b15ab, type: 3}
