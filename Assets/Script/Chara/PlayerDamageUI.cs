@@ -22,6 +22,11 @@ public class PlayerDamageUI : MonoBehaviour
             return;
         }
 
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
         var curDamage = BattleManager.Instance.ScaledTotalDamage;
         bool animation = false;
 

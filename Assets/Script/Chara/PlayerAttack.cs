@@ -32,6 +32,11 @@ public class PlayerAttack : MonoBehaviour
 
     public void Update()
     {
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
         if (_attackLastTime > 0f)
         {
             _attackLastTime -= Time.deltaTime;
@@ -165,7 +170,6 @@ public class PlayerAttack : MonoBehaviour
             enemy?.OnDamage(_hitCount, damage);
         }
     }
-
 
     public void FinishAttack()
     {

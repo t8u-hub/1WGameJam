@@ -58,6 +58,11 @@ public class PlayerPositionController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
         _previousPosition = transform.position;
         var nextPosition = _previousPosition;
 

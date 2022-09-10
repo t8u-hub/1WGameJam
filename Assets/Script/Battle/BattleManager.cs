@@ -10,6 +10,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public static float MAX_GAUGE_VALUE = 100f;
 
+    public bool StopUpdate { get; private set; } = false;
+
     protected static BattleManager _instance = null;
     public static BattleManager Instance => _instance;
 
@@ -199,5 +201,26 @@ public class BattleManager : MonoBehaviour
         ScaledTotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
 
         _noDamageTimer = 0;
+    }
+
+    public void SpecialAttack()
+    {
+        StartCoroutine(SpecialAttackInner());
+    }
+
+    private IEnumerator SpecialAttackInner()
+    {
+        StopUpdate = true;
+
+        _gameUi.PlayCutin(_player.CharaLevel);
+        yield return new WaitForSecondsRealtime(1.2f);
+
+        StopUpdate = false;
+
+        foreach(var enemy in _enemyList)
+        {
+            enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef));
+        }
+        CurrentGauge = 0;
     }
 }

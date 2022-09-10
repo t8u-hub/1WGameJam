@@ -259,6 +259,11 @@ public class Player : MonoSingleton<Player>
 
     void Update()
     {
+        if (BattleManager.Instance != null && BattleManager.Instance.StopUpdate)
+        {
+            return;
+        }
+
 #if UNITY_EDITOR
 
         Debug_ReleaseItem();
@@ -432,7 +437,7 @@ public class Player : MonoSingleton<Player>
         // 必殺技
         if (EnableSpecialAttack())
         {
-            Debug.Log("必殺技が打てます");
+            BattleManager.Instance.SpecialAttack();
         }
 
         if (_attackMotionTime <= 0f)
@@ -462,7 +467,8 @@ public class Player : MonoSingleton<Player>
         else
         {
             if (Input.GetKeyUp(KeyCode.Space) || // スペースキーが放される
-                _attackMotionTime > 0)           // 何か別のモーションが始まる
+                _attackMotionTime > 0 ||         // 何か別のモーションが始まる
+                _noDamageTime > 0)               // ダメージを受けても解除
             {
                 _jumpWithSpace = false;
             }
@@ -471,9 +477,10 @@ public class Player : MonoSingleton<Player>
         if (_jumpWithSpace)
         {
             _spaceLongTapTime += Time.deltaTime;
-            if (_spaceLongTapTime > 1f)
+            if (_spaceLongTapTime > .5f)
             {
                 _spaceLongTapTime = 0f;
+                _jumpWithSpace = false;
                 return true;
             }
         }
