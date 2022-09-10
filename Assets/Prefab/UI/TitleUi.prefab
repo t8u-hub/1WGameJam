@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 8864221234327481138}
   - component: {fileID: 3014932352047092338}
   - component: {fileID: 4762335106883329031}
+  - component: {fileID: 277102163949178002}
   m_Layer: 0
   m_Name: Sparkles
   m_TagString: Untagged
@@ -341,7 +342,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.63}
 --- !u!222 &3014932352047092338
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -380,6 +381,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &277102163949178002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150971991492806656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e667604985384ff5ba3e1217047b683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotateSpeed: 3
 --- !u!1 &2686954060637811888
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,6 +600,7 @@ GameObject:
   - component: {fileID: 2291581502267807009}
   - component: {fileID: 6492719832073453237}
   - component: {fileID: 7336079191138538210}
+  - component: {fileID: 2840096540052153129}
   m_Layer: 0
   m_Name: MoonBlur
   m_TagString: Untagged
@@ -651,6 +666,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2840096540052153129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5289320539250091075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a444060eefbef440e981829ef3dd5a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _frequency: 3
+  _alphaMax: 1
+  _alphaMin: 0.2
 --- !u!1 &7498762693671372602
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1566449674731860408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1063,6 +1093,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PanelFader
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954297789210525249, guid: edc0b91dba66d434e958930756de416e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edc0b91dba66d434e958930756de416e, type: 3}
