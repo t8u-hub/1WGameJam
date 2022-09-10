@@ -20,6 +20,24 @@ public class DamageText : MonoBehaviour
     System.Action _onNext = null;
     System.Action _onEnd = null;
 
+    public void SetValue(int num)
+    {
+        if (num < _threshold.x)
+        {
+            text.font = _fontArray[0];
+        }
+        else if (num < _threshold.y)
+        {
+            text.font = _fontArray[1];
+        }
+        else
+        {
+            text.font = _fontArray[2];
+        }
+
+        text.text = num.ToString();
+    }
+
     public void PlayDamage(int num, System.Action onNext, System.Action onEnd)
     {
         _onNext = onNext;
