@@ -104,7 +104,7 @@ public class EnemyFlying : Enemy
             {
                 _state = State.Attack;
                 _image.sprite = _imageArray[(int)_state];
-                BattleManager.Instance.EnemyAttack(_parameter.AttackPower);
+                BattleManager.Instance.EnemyAttack(_parameter.AttackPower, transform.position.x);
                 return true;
             }
             else

@@ -125,14 +125,14 @@ public class PlayerPositionController : MonoBehaviour
         if (_moveLeft)
         {
             nextPosition += LEFT * _velocity;
-            _imageTransform.transform.localScale = new Vector3(1, 1, 1);
+            _imageTransform.transform.localScale = Player.IMG_DEFAULT;
         }
 
         // キー入力による右移動
         if (_moveRight)
         {
             nextPosition += RIGHT * _velocity;
-            _imageTransform.transform.localScale = new Vector3(-1, 1, 1);
+            _imageTransform.transform.localScale = Player.IMG_FLIP;
         }
 
         // 画面外に出ないよう横の移動制限
@@ -212,4 +212,10 @@ public class PlayerPositionController : MonoBehaviour
     {
         _speed.y = _speed.y > 0f ? 0f : _speed.y;
     }
+
+    public void SetPlayerDirection(bool right)
+    {
+        _imageTransform.localScale = right ? Player.IMG_FLIP : Player.IMG_DEFAULT;
+    }
+
 }

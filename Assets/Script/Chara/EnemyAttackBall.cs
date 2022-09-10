@@ -18,7 +18,7 @@ public class EnemyAttackBall : MonoBehaviour
         var tag = collision.tag;
         if (tag == "Player" && BattleManager.Instance != null)
         {
-            BattleManager.Instance.EnemyAttack(_damage);
+            BattleManager.Instance.EnemyAttack(_damage, transform.position.x);
         }
     }
 
