@@ -27,6 +27,9 @@ public class ResultUi : UiBase
     [SerializeField]
     float _allAnimeTime;
 
+    [SerializeField]
+    Transform _spaceButtonIcon;
+
     private float _photoTime = 0f;
     private float _resultTime = 0f;
 
@@ -36,8 +39,9 @@ public class ResultUi : UiBase
         var resultParam = ResultTempData.Instance.GetData();
         _scoreText.text = resultParam.Score.ToString();
         _specialNumCountText.text = $"{resultParam.SpecialAttackNum} 回";
+        _spaceButtonIcon.gameObject.SetActive(false);
 
-        foreach(var item in resultParam.ItemIdList)
+        foreach (var item in resultParam.ItemIdList)
         {
             var iconImage = GameObject.Instantiate<Image>(_iconImage, _iconImage.transform.parent);
             iconImage.sprite = Resources.Load<Sprite>($"UiResources/UI/02_game/item/item_{item}");
@@ -85,6 +89,8 @@ public class ResultUi : UiBase
         }
         else
         {
+            if (!_spaceButtonIcon.gameObject.activeSelf)
+                _spaceButtonIcon.gameObject.SetActive(true);
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 UIManager.Instance.SetFadeColor(new Color32(255, 255, 255, 255));
