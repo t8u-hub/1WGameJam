@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _normalSprite:
   - {fileID: 21300000, guid: 122fc80502823484e953c5b963473536, type: 3}
-  - {fileID: 21300000, guid: 70479848159680544bedc1567ff8fa76, type: 3}
+  - {fileID: 21300000, guid: bc62666bd88fd1f4a8653da7ef1c0614, type: 3}
   - {fileID: 21300000, guid: 86cd818f6a3eaa347b4d203696484044, type: 3}
   _runSprite:
   - {fileID: 21300000, guid: 8d96c635bb5e66f4dbab13706917b27b, type: 3}
