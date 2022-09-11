@@ -371,7 +371,10 @@ public class Enemy : MonoBehaviour
         }
 
         _image.sprite = _imageArray[(int)State.Damaging];
+        hit_effect.Play();
     }
+
+    [SerializeField] Animation hit_effect;
 
     public void OnDeadAnimationEnd()
     {
