@@ -152,7 +152,7 @@ public class EnemySpawner : MonoBehaviour
             enemy = SpawnNormal(enemyPrefab, parameter);
         }
 
-        enemy.transform.position = spawnPoint.position + new Vector3(Random.Range(-75f, 75f) , Random.Range(0f, 100f), 0f);
+        enemy.transform.position = spawnPoint.position + new Vector3(Random.Range(-100f, 100f) , Random.Range(0f, 100f), 0f);
 
         return enemy;
     }

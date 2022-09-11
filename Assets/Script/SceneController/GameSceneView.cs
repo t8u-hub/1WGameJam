@@ -48,6 +48,10 @@ public class GameSceneController : SceneControllerBase<GameSceneView>
         var sprit = Resources.Load<Sprite>(_bgImagePathArray[level - 1]);
         _view.BgImage.sprite = sprit;
 
+       // ちらつき軽減で2ふれまつ
+        yield return null;
+        yield return null;
+
         _view.MainCamera.orthographicSize = _view.CameraParamArray[level - 1].y;
 
         UIManager.Instance.FadeIn(() => complete = true);
