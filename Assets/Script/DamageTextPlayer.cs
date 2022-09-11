@@ -10,20 +10,23 @@ public class DamageTextPlayer : MonoBehaviour
     [SerializeField]
     DamageText _damageText;
 
-    public void PlayDamageTextAnimation(int amount, int hit, bool flip  = false, Vector3? pos = null)
+    public void PlayDamageTextAnimation(List<int> damageList, bool flip  = false, Vector3? pos = null)
     {
         Vector3 position = pos ?? Vector3.zero;
 
         var damageText = GameObject.Instantiate<DamageText>(_damageText, transform);
         damageText.transform.localPosition = position;
-
-        damageText.PlayDamage(amount,
+        var hit = damageList.Count;
+        damageText.PlayDamage(damageList[0],
             () =>
             {
                 if (hit > 1)
                 {
                     var offset = flip ? OFFSET_FLIP : OFFSET;
-                    PlayDamageTextAnimation(amount, hit - 1, flip, position + offset);
+                    offset.y *= Random.Range(.5f, 1.5f);
+                    offset.x *= Random.Range(.9f, 1.1f);
+                    damageList.RemoveAt(0);
+                    PlayDamageTextAnimation(damageList, flip, position + offset);
                 }
             },
             () =>
