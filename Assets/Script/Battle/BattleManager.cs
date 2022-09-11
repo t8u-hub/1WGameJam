@@ -8,7 +8,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 必殺技ゲージの上限値
     /// </summary>
-    public static float MAX_GAUGE_VALUE = 100f;
+    public static float MAX_GAUGE_VALUE = 1f;
 
     public bool StopUpdate { get; private set; } = false;
 
@@ -55,6 +55,26 @@ public class BattleManager : MonoBehaviour
     /// 現在スポーンしている総エネミー数
     /// </summary>
     public int CurrentEnemyCount { get; private set; }
+
+
+    public int MoveRaneg
+    {
+        get
+        {
+            if (_player.CharaLevel == 1)
+            {
+                return 400;
+            } 
+            else if (_player.CharaLevel == 2)
+            {
+                return 480;
+            }
+            else
+            {
+                return 560;
+            }
+        }
+    }
 
     public float PlayerAttackCoef => _battleWaveModel.CurrentWaveData.AttacCoef;
 
@@ -250,6 +270,7 @@ public class BattleManager : MonoBehaviour
             CurrentGauge = MAX_GAUGE_VALUE;
             if (prevGauge < MAX_GAUGE_VALUE)
             {
+                _gameUi.PlayGaugeAnim();
                 SeAudioManager.Instance.Play(SeAudioManager.SeType.GaugeMax);
             }
         }

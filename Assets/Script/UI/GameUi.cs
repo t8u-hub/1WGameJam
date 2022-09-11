@@ -21,6 +21,8 @@ public class GameUi : UiBase
     [SerializeField]
     ObjectAnimator _tipsAnimator;
 
+    [SerializeField]
+    Animation _gaugeAnimation;
 
     /// <summary>
     /// 必殺技ゲージ
@@ -101,6 +103,11 @@ public class GameUi : UiBase
         {
             _weaponIconDict[(int)data.Type - 1].SetNewWeapon(data.Level);
         }
+    }
+
+    public void PlayGaugeAnim()
+    {
+        _gaugeAnimation.Play();
     }
 
     public void Update()
