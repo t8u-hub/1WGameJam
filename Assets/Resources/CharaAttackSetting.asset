@@ -32,5 +32,5 @@ MonoBehaviour:
       HitArea: {x: 240, y: 60}
       RigidityTime: 0.1
       MoveSpeed: 1200
-  _rigidityTime: 0.1
-  _noDamageTime: 0.5
+  _rigidityTime: 0.09
+  _noDamageTime: 0.8
