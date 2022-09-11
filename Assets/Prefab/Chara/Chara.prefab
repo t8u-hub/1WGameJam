@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d037ac663e4ab40adda259e3de3530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _velocity: 4.04
+  _velocity: 4.35
   _jumpPower: 20369
   _imageTransform: {fileID: 5304176563584605045}
 --- !u!50 &8595752560939551131
