@@ -39,6 +39,8 @@ public class TitleUi : UiBase
         float timeToPressSpace = 2.0f;
         await UniTask.WaitUntil(() => CountUpWhilePressed(timeToPressSpace));
 
+        SeAudioManager.Instance.Play(SeAudioManager.SeType.GameStart);
+
         // 画面が切れるエフェクト
         await _slashEffect.ChangeFillAmount();
 

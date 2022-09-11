@@ -107,6 +107,7 @@ public class PlayerPositionController : MonoBehaviour
 
             if (_currentJumpCount < 2)
             {
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.Jump);
                 _currentJumpCount += 1;
                 _isGround = false;
                 _acceleration += Vector3.up * _jumpPower;
