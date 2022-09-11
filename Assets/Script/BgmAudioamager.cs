@@ -43,19 +43,6 @@ public class BgmAudioamager : MonoSingleton<BgmAudioamager>
         _bgmAudioSource[_activeIndex].clip = _bgmAudioClip[(int)type];
         _bgmAudioSource[_activeIndex].Play();
 
-        switch (type)
-        {
-            case BgmType.Title:
-                _bgmAudioSource[_activeIndex].volume = .8f;
-                break;
-            case BgmType.Game:
-                _bgmAudioSource[_activeIndex].volume = 1f;
-                break;
-            case BgmType.Result:
-                _bgmAudioSource[_activeIndex].volume = .5f;
-                break;
-        }
-
         if (_activeIndex == 0)
         {
             _audioMixer.TransitionToSnapshots(_snapShot, new float[] { 1, 0 }, .3f);

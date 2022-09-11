@@ -11,8 +11,14 @@ public class TutorialUi : UiBase
 
     public override void Initialize()
     {
-        var isCleard = ResultTempData.Instance.GetData().IsClear;
-        var path = isCleard ? "UiResources/bg/04_ending/01_ending_cleard" : "UiResources/bg/04_ending/01_ending_cleard";
+        var resultData = ResultTempData.Instance.GetData();
+        var isCleard = resultData.IsClear;
+        var charaLevel = resultData.FinalCharaLevel;
+
+        var path = isCleard ? "UiResources/bg/04_ending/04_ending_cleard" :
+            charaLevel == 1 ? "UiResources/bg/04_ending/01_ending_child" :
+            charaLevel == 2 ? "UiResources/bg/04_ending/02_ending_young" :
+                              "UiResources/bg/04_ending/03_ending_otona";
 
         _imgae.sprite = Resources.Load<Sprite>(path);
         _isShow = true;

@@ -30,7 +30,6 @@ public class PlayerPositionController : MonoBehaviour
     private static readonly Vector3 ZERO = Vector3.zero;
     private static readonly Vector3 UP = Vector3.up;
     public static readonly string GROUND = "Ground";
-    public static float X_MOVE_RANGE = 400;
 
     private State _state = State.Default;
 
@@ -73,9 +72,9 @@ public class PlayerPositionController : MonoBehaviour
                 nextPosition = nextPosition + _speed * Time.fixedDeltaTime;
 
                 // 画面外に出ないよう横の移動制限
-                if (Mathf.Abs(nextPosition.x) > X_MOVE_RANGE)
+                if (Mathf.Abs(nextPosition.x) > BattleManager.Instance.MoveRaneg)
                 {
-                    nextPosition.x = (nextPosition.x > 0) ? X_MOVE_RANGE : -X_MOVE_RANGE;
+                    nextPosition.x = (nextPosition.x > 0) ? BattleManager.Instance.MoveRaneg : -BattleManager.Instance.MoveRaneg;
                 }
 
                 transform.position = nextPosition;
@@ -145,9 +144,9 @@ public class PlayerPositionController : MonoBehaviour
         }
 
         // 画面外に出ないよう横の移動制限
-        if (Mathf.Abs(nextPosition.x) > X_MOVE_RANGE)
+        if (Mathf.Abs(nextPosition.x) > BattleManager.Instance.MoveRaneg)
         {
-            nextPosition.x = (nextPosition.x > 0) ? X_MOVE_RANGE : -X_MOVE_RANGE;
+            nextPosition.x = (nextPosition.x > 0) ? BattleManager.Instance.MoveRaneg : -BattleManager.Instance.MoveRaneg;
         }
 
         transform.position = nextPosition;

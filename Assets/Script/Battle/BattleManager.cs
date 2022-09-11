@@ -56,6 +56,26 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public int CurrentEnemyCount { get; private set; }
 
+
+    public int MoveRaneg
+    {
+        get
+        {
+            if (_player.CharaLevel == 1)
+            {
+                return 400;
+            } 
+            else if (_player.CharaLevel == 2)
+            {
+                return 480;
+            }
+            else
+            {
+                return 560;
+            }
+        }
+    }
+
     public float PlayerAttackCoef => _battleWaveModel.CurrentWaveData.AttacCoef;
 
     /// <summary>
@@ -250,6 +270,7 @@ public class BattleManager : MonoBehaviour
             CurrentGauge = MAX_GAUGE_VALUE;
             if (prevGauge < MAX_GAUGE_VALUE)
             {
+                _gameUi.PlayGaugeAnim();
                 SeAudioManager.Instance.Play(SeAudioManager.SeType.GaugeMax);
             }
         }

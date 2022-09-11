@@ -75,10 +75,10 @@ public class EnemyFlying : Enemy
         var nextPosition = _previousPosition + _speed * Time.deltaTime;
 
         // 画面外に出ないよう横の移動制限
-        if (Mathf.Abs(nextPosition.x) > PlayerPositionController.X_MOVE_RANGE)
+        if (Mathf.Abs(nextPosition.x) >BattleManager.Instance.MoveRaneg)
         {
             nextPosition.x = (nextPosition.x > 0) ?
-                PlayerPositionController.X_MOVE_RANGE : -PlayerPositionController.X_MOVE_RANGE;
+               BattleManager.Instance.MoveRaneg : -BattleManager.Instance.MoveRaneg;
 
             // 反転
             _defaultMoveRight = !_defaultMoveRight;

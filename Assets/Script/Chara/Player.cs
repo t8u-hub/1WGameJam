@@ -199,7 +199,7 @@ public class Player : MonoSingleton<Player>
             _charaLevel += 1;
         }
 
-        ResetSprite();
+        ResetSprite(true);
     }
 
     private void Awake()
@@ -575,9 +575,9 @@ public class Player : MonoSingleton<Player>
         }
     }
 
-    private void ResetSprite()
+    private void ResetSprite(bool forceOverride = false)
     {
-        if (!_playerPositionController.IsGround)
+        if (!_playerPositionController.IsGround || forceOverride)
         {
             if (_spriteState != ActionSpriteState.Jump)
             {
@@ -588,7 +588,7 @@ public class Player : MonoSingleton<Player>
             return;
         }
 
-        if (_playerPositionController.IsMove)
+        if (_playerPositionController.IsMove || forceOverride)
         {
             if (_spriteState != ActionSpriteState.Move)
             {
@@ -599,7 +599,7 @@ public class Player : MonoSingleton<Player>
             return;
         }
 
-        if (_spriteState != ActionSpriteState.Stop)
+        if (_spriteState != ActionSpriteState.Stop || forceOverride)
         {
             _image.sprite = _spriteSettingData.GetSprite(PlayerSpriteDataSetting.Type.Normal, _charaLevel);
             _image.transform.localScale = IMG_FLIP;
