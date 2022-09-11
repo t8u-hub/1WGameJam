@@ -64,16 +64,14 @@ public class UIManager : MonoSingleton<UIManager>
         _fadeAnimator.PlayFade(1, 0, onComplete);
     }
 
-    public void FadeOut(System.Action onComplete)
+    public void FadeOut(System.Action onComplete, float dulation = .2f)
     {
-        _fadeAnimator.SetColor(WHITE);
-        _fadeAnimator.PlayFade(0, 1, onComplete);
+        _fadeAnimator.PlayFade(0, 1, onComplete, dulation);
     }
 
-    public void FadeOut(System.Action onComplete, Color32 color)
+    public void SetFadeColor(Color32 color)
     {
         _fadeAnimator.SetColor(color);
-        _fadeAnimator.PlayFade(0, 1, onComplete);
     }
 
 

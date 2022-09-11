@@ -34,7 +34,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 獲得済のアイテムID
     /// </summary>
-    private List<int> GetItemIdList = new List<int>();
+    private List<int> GetItemIdList = new List<int>() { 101 };
 
     /// <summary>
     /// 現在の必殺技ゲージの値
@@ -74,6 +74,8 @@ public class BattleManager : MonoBehaviour
 
     private float _pastTime;
 
+    private int _specialAttackNum = 0;
+
     void Awake()
     {
         if (_instance == null)
@@ -102,12 +104,41 @@ public class BattleManager : MonoBehaviour
         _noDamageTimer += Time.deltaTime;
         if(_noDamageTimer > 3f && ScaledTotalDamage > 0)
         {
-            // 仮　1秒で２回復する想定
-            var recoverAmount = 2 * Time.deltaTime;
+            // 仮　1秒で.２回復する想定
+            var recoverAmount = .2f * Time.deltaTime;
             ScaledTotalDamage = Mathf.Max(0, ScaledTotalDamage - recoverAmount);
         }
 
         _battleWaveModel.UpdateWaveModel();
+        if (_battleWaveModel.AllWaveEnd)
+        {
+            var param = new ResultTempData.Parameter
+            {
+                IsClear = true,
+                FinalCharaLevel = _player.CharaLevel,
+                Score = CurrentScore,
+                ItemIdList = GetItemIdList,
+                SpecialAttackNum = _specialAttackNum
+            };
+            StartCoroutine(GameFinish(param, new Color32(255, 255, 255, 255)));
+        }
+
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+
+            var param = new ResultTempData.Parameter
+            {
+                IsClear = true,
+                FinalCharaLevel = 3,
+                Score = CurrentScore,
+                ItemIdList = GetItemIdList,
+                SpecialAttackNum = _specialAttackNum
+            };
+            StartCoroutine(GameFinish(param, new Color32(255, 255, 255, 255)));
+        }
+#endif
     }
 
     public void GameStart(GameUi gameUi)
@@ -155,6 +186,11 @@ public class BattleManager : MonoBehaviour
             if (enemy.DropItemId != 0)
             {
                 var isLevelUp = _player.GetItem(enemy.DropItemId);
+
+                if (!GetItemIdList.Contains(enemy.DropItemId))
+                {
+                    GetItemIdList.Add(enemy.DropItemId);
+                }
                 _gameUi.UpdateItemUiIfNeed(enemy.DropItemId);
 
                 // レベルが上がるときの処理
@@ -226,11 +262,27 @@ public class BattleManager : MonoBehaviour
         _player.OnDamage(posX);
         ScaledTotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
 
+        if (ScaledTotalDamage > 30)
+        {
+            StopUpdate = true;
+            // ゲームオーバー
+            var param = new ResultTempData.Parameter
+            {
+                IsClear = false,
+                FinalCharaLevel = _player.CharaLevel,
+                Score = CurrentScore,
+                ItemIdList = GetItemIdList,
+                SpecialAttackNum = _specialAttackNum
+            };
+            StartCoroutine(GameFinish(param, new Color32(255, 211, 232, 255)));
+        }
+
         _noDamageTimer = 0;
     }
 
     public void SpecialAttack()
     {
+        _specialAttackNum += 1;
         StartCoroutine(SpecialAttackInner());
     }
 
@@ -248,5 +300,13 @@ public class BattleManager : MonoBehaviour
             enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef), true);
         }
         CurrentGauge = 0;
+    }
+
+    private IEnumerator GameFinish(ResultTempData.Parameter param, Color32 fadeColor)
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        ResultTempData.Instance.SetData(param);
+        UIManager.Instance.SetFadeColor(fadeColor);
+        SceneManager.Instance.ChangeScene(SceneDefine.Scene.Result);
     }
 }

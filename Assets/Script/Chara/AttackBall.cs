@@ -26,13 +26,7 @@ public class AttackBall : MonoBehaviour
         if (tag == "Enemy")
         {
             var enemy = collision.transform.GetComponent<Enemy>();
-            enemy?.OnDamage(1, _damage);
-
-            _hit--;
-            if (_hit == 0)
-            {
-                Destroy(this.gameObject);
-            }
+            enemy?.OnDamage(_hit, _damage);
         }
     }
 
