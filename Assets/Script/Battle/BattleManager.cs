@@ -125,7 +125,7 @@ public class BattleManager : MonoBehaviour
         if(_noDamageTimer > 3f && ScaledTotalDamage > 0)
         {
             // 仮　1秒で.２回復する想定
-            var recoverAmount = .2f * Time.deltaTime;
+            var recoverAmount = .6f * Time.deltaTime;
             ScaledTotalDamage = Mathf.Max(0, ScaledTotalDamage - recoverAmount);
         }
 
