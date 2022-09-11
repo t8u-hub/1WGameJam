@@ -59,4 +59,6 @@ public class GameSceneController : SceneControllerBase<GameSceneView>
         yield return new WaitForSeconds(0.3f);
         yield return base.OnEndScene();
     }
+
+    protected override BgmAudioamager.BgmType GetBgmType() => BgmAudioamager.BgmType.Game;
 }

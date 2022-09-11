@@ -88,7 +88,7 @@ public class ResultUi : UiBase
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 UIManager.Instance.SetFadeColor(new Color32(255, 255, 255, 255));
-                SceneManager.Instance.ChangeScene(SceneDefine.Scene.Title);
+                SceneManager.Instance.ChangeScene(SceneDefine.Scene.Tutorial);
             }
         }
     }
