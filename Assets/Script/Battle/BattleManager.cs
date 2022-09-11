@@ -326,7 +326,7 @@ public class BattleManager : MonoBehaviour
 
         foreach(var enemy in _enemyList)
         {
-            enemy.OnDamage(1, (int)(2000 * _battleWaveModel.CurrentWaveData.AttacCoef), true);
+            enemy.OnDamage(5, (int)(400 * _battleWaveModel.CurrentWaveData.AttacCoef), true);
         }
         CurrentGauge = 0;
     }

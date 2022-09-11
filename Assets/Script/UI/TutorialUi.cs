@@ -6,7 +6,10 @@ public class TutorialUi : UiBase
 {
     [SerializeField]
     private Image _imgae;
-    
+
+    [SerializeField]
+    private Image _gameOver;
+
     private bool _isShow = false;
 
     public override void Initialize()
@@ -21,6 +24,9 @@ public class TutorialUi : UiBase
                               "UiResources/bg/04_ending/03_ending_otona";
 
         _imgae.sprite = Resources.Load<Sprite>(path);
+
+        _gameOver.gameObject.SetActive(!isCleard);
+
         _isShow = true;
     }
 

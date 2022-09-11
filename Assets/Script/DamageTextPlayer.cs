@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DamageTextPlayer : MonoBehaviour
 {
-    private static readonly Vector3 OFFSET = new Vector3(18f, 10f, 0f);
-    private static readonly Vector3 OFFSET_FLIP = new Vector3(-18f, 10f, 0f);
+    private static readonly Vector3 OFFSET = new Vector3(5f, 18f, 0f);
+    private static readonly Vector3 OFFSET_FLIP = new Vector3(-5f, 18f, 0f);
 
     [SerializeField]
     DamageText _damageText;
