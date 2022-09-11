@@ -38,8 +38,8 @@ public class TitleUi : UiBase
 
         // 竹を揺らす & 月の明るさを変える & 竹の光芒が回る
 
-        // スペースを2秒以上押していたらシーン遷移
-        float timeToPressSpace = 2.0f;
+        // スペースを0.5秒以上押していたらシーン遷移
+        float timeToPressSpace = 0.5f;
         await UniTask.WaitUntil(() => CountUpWhilePressed(timeToPressSpace));
 
         SeAudioManager.Instance.Play(SeAudioManager.SeType.GameStart);
