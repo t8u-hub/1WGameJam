@@ -307,6 +307,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
         ResultTempData.Instance.SetData(param);
         UIManager.Instance.SetFadeColor(fadeColor);
-        SceneManager.Instance.ChangeScene(SceneDefine.Scene.Result);
+        SceneManager.Instance.ChangeScene(SceneDefine.Scene.Tutorial);
     }
 }
