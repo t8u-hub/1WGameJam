@@ -18,6 +18,10 @@ public class GameUi : UiBase
     [SerializeField]
     private DamageText _scoreText;
 
+    [SerializeField]
+    ObjectAnimator _tipsAnimator;
+
+
     /// <summary>
     /// 必殺技ゲージ
     /// </summary>
@@ -43,8 +47,6 @@ public class GameUi : UiBase
 
     public override void Initialize()
     {
-        _button.onClick.AddListener(OnClickStartButton);
-
         _weaponList = new CsvReader().Create(CsvDefine.WeaponData.PATH).CsvData
             .Select(csvData =>
                 new Weapon(csvData[CsvDefine.WeaponData.WEAPON_ID],
@@ -56,6 +58,16 @@ public class GameUi : UiBase
 
         _attackGauge.minValue = 0;
         _attackGauge.maxValue = BattleManager.MAX_GAUGE_VALUE;
+
+        if (ResultTempData.Instance.GetData() == null)
+        {
+            _tipsAnimator.gameObject.SetActive(true);
+        }
+        else
+        {
+            Destroy(_tipsAnimator.gameObject);
+            OnClickStartButton();
+        }
     }
 
     private void OnClickStartButton()
@@ -93,6 +105,19 @@ public class GameUi : UiBase
 
     public void Update()
     {
+        if (_tipsAnimator != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _tipsAnimator.PlayFade(1, 0, () =>
+                {
+                    OnClickStartButton();
+                    Destroy(_tipsAnimator.gameObject);
+                });
+            }
+            return;
+        }
+
         if (BattleManager.Instance == null || BattleManager.Instance.StopUpdate)
         {
             return;
