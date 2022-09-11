@@ -8,7 +8,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 必殺技ゲージの上限値
     /// </summary>
-    public static float MAX_GAUGE_VALUE = 1f;
+    public static float MAX_GAUGE_VALUE = 100f;
 
     public bool StopUpdate { get; private set; } = false;
 

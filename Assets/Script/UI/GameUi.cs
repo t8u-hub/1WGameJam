@@ -7,9 +7,6 @@ public class GameUi : UiBase
 { 
 
     [SerializeField]
-    private Button _button;
-
-    [SerializeField]
     private WeaponIconUi[] _weaponIconDict;
 
     [SerializeField]
@@ -82,8 +79,6 @@ public class GameUi : UiBase
         }
 
         battleManager.GameStart(this);
-        _button.onClick.AddListener(() => { });
-        _button.gameObject.SetActive(false);
     }
 
     public void UpdateItemUiIfNeed(int itemId)
