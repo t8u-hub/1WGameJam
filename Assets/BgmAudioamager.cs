@@ -64,5 +64,7 @@ public class BgmAudioamager : MonoSingleton<BgmAudioamager>
         {
             _audioMixer.TransitionToSnapshots(_snapShot, new float[] { 0, 1 }, .3f);
         }
+
+        _currentBgmType = type;
     }
 }
