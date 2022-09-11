@@ -348,6 +348,8 @@ public class Enemy : MonoBehaviour
         var damageText = GameObject.Instantiate<DamageTextPlayer>(_damageText, transform);
         damageText.PlayDamageTextAnimation(amount, hitCount, _imageTransform.transform.localScale.x < 0);
 
+        SeAudioManager.Instance.Play(SeAudioManager.SeType.EnemyDamage);
+
         // 与えたダメージ量だけゲージ上昇
         BattleManager.Instance.PlayerAttack(hitCount * amount, isSpecial);
         if (_hp <= 0)

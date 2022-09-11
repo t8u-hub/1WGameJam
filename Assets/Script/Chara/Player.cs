@@ -329,6 +329,8 @@ public class Player : MonoSingleton<Player>
                 _attackMotionTime = info.RigidityTime;
                 _playerAttack.AttackNormal(weapon.Hit, weapon.Damage, info.HitArea);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.Normal, ActionType.NormalAttack);
+
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.Attack);
             }
         }
         else if (_actionEnableStateDict[ActionType.HorizontalMoveAttack].CanExec && Input.GetKeyDown(KeyCode.X))
@@ -346,6 +348,9 @@ public class Player : MonoSingleton<Player>
                 _attackMotionTime = info.MaxLastTime ;
                 SetActionEnableState(CsvDefine.ActionData.AttackType.HorizontalMove, ActionType.HorizontalMoveAttack);
                 _playerAttack.AttackHorizontalMove(weapon.Hit, weapon.Damage, info.HitArea, info.MaxLastTime);
+
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.Horizontal);
+
                 _playerPositionController.DoHorizontalMoveAttack(info.MaxLastTime, info.MoveSpeed, () =>
                 {
                     if (_attackMotionTime > 0)
@@ -372,6 +377,8 @@ public class Player : MonoSingleton<Player>
                 _attackMotionTime = info.RigidityTime;
                 _playerAttack.AttackMiddleDistance(weapon.Hit, weapon.Damage, transform.parent, info.HitArea, info.ThrowSpeed, info.ThrowPich);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.MiddleDistance, ActionType.MiddleDistanceAttack);
+
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.Middle);
             }
         }
         else if (_actionEnableStateDict[ActionType.LongRangeAttack].CanExec && Input.GetKeyDown(KeyCode.V))
@@ -389,6 +396,8 @@ public class Player : MonoSingleton<Player>
                 _attackMotionTime = info.RigidityTime;
                 _playerAttack.AttackLongRange(weapon.Hit, weapon.Damage, info.HitArea);
                 SetActionEnableState(CsvDefine.ActionData.AttackType.LongRange, ActionType.LongRangeAttack);
+
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.Long);
             }
         }
         else if (_actionEnableStateDict[ActionType.VerticalMoveAttack].CanExec && Input.GetKeyDown(KeyCode.DownArrow))
@@ -406,11 +415,14 @@ public class Player : MonoSingleton<Player>
                     _image.transform.localScale = IMG_DEFAULT;
                     _spriteState = ActionSpriteState.Attack;
 
+                    SeAudioManager.Instance.Play(SeAudioManager.SeType.VerticalStart);
+
                     SetActionEnableState(CsvDefine.ActionData.AttackType.VerticalMove, ActionType.VerticalMoveAttack);
                     // 100秒降下し続けることはないと思うので...という最悪なコード
                     _attackMotionTime = 100f;
                     _playerPositionController.DoVerticalMoveAttack(info.MoveSpeed, () =>
                     {
+                        SeAudioManager.Instance.Play(SeAudioManager.SeType.VerticalEnd);
                         _playerAttack.AttackVerticalMove(weapon.Hit, weapon.Damage, info.HitArea);
                         // 着地してから固定秒数つづく
                         _attackMotionTime = info.RigidityTime;

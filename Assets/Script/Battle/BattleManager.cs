@@ -130,7 +130,7 @@ public class BattleManager : MonoBehaviour
 
             var param = new ResultTempData.Parameter
             {
-                IsClear = true,
+                IsClear = false,
                 FinalCharaLevel = 3,
                 Score = CurrentScore,
                 ItemIdList = GetItemIdList,
@@ -240,12 +240,18 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        var prevGauge = CurrentGauge;
+
         // ゲージ上昇
         CurrentGauge += (float)damage / _battleWaveModel.CurrentWaveData.GaugeCoef; // 値がめちゃ大きくなりそうなのでスケールかけとく
 
-        if (CurrentGauge > MAX_GAUGE_VALUE)
+        if (CurrentGauge >= MAX_GAUGE_VALUE)
         {
             CurrentGauge = MAX_GAUGE_VALUE;
+            if (prevGauge < MAX_GAUGE_VALUE)
+            {
+                SeAudioManager.Instance.Play(SeAudioManager.SeType.GaugeMax);
+            }
         }
     }
 
@@ -259,6 +265,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        SeAudioManager.Instance.Play(SeAudioManager.SeType.Damage);
         _player.OnDamage(posX);
         ScaledTotalDamage += damage / 1000f; // 値がめちゃくちゃ大きくなりそうなのでスケールしておく
 
@@ -290,6 +297,7 @@ public class BattleManager : MonoBehaviour
     {
         StopUpdate = true;
 
+        SeAudioManager.Instance.Play(SeAudioManager.SeType.SpecialAttack);
         _gameUi.PlayCutin(_player.CharaLevel);
         yield return new WaitForSecondsRealtime(1.2f);
 
