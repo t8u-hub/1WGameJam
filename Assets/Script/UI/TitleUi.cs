@@ -9,6 +9,8 @@ public class TitleUi : UiBase
     [SerializeField]
     private GameObject _titleLogo;
     [SerializeField]
+    private GameObject _explainLogo;
+    [SerializeField]
     private GameObject _initialObjects;
     [SerializeField]
     private GameObject _slashedEffectObjects;
@@ -28,6 +30,7 @@ public class TitleUi : UiBase
         _faderPanel.gameObject.SetActive(true);
         _initialObjects.SetActive(true);
         _titleLogo.SetActive(true);
+        _explainLogo.SetActive(true);
         // 最初に表示しないオブジェクト
         _slashedEffectObjects.SetActive(false);
 

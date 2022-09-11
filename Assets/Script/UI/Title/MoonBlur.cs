@@ -19,7 +19,7 @@ public class MoonBlur : MonoBehaviour
 
     private void Update()
     {
-        float alpha = _alphaMin + (_alphaMax - _alphaMin) * Mathf.Sin(_frequency * Time.time);
+        float alpha = _alphaMin + (_alphaMax - _alphaMin)/2 + (_alphaMax - _alphaMin) * Mathf.Sin(_frequency * Time.time)/2;
         _image.color = new Color(1, 1, 1, alpha);
     }
 }
