@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
@@ -343,15 +344,22 @@ public class Enemy : MonoBehaviour
 
     public void OnDamage(int hitCount, int amount, bool isSpecial = false)
     {
-        _hp -= amount * hitCount;
-
+        var damageList = new List<int>();
+        var totalDamage = 0;
+        for (var i = 0; i < hitCount; i++)
+        {
+            var damage = (int)((float)amount * Random.Range(0.9f, 1.1f));
+            damageList.Add(damage);
+            totalDamage += damage;
+        }
+        _hp -= totalDamage;
         var damageText = GameObject.Instantiate<DamageTextPlayer>(_damageText, transform);
-        damageText.PlayDamageTextAnimation(amount, hitCount, _imageTransform.transform.localScale.x < 0);
+        damageText.PlayDamageTextAnimation(damageList, _imageTransform.transform.localScale.x < 0);
 
         SeAudioManager.Instance.Play(SeAudioManager.SeType.EnemyDamage);
 
         // 与えたダメージ量だけゲージ上昇
-        BattleManager.Instance.PlayerAttack(hitCount * amount, isSpecial);
+        BattleManager.Instance.PlayerAttack(totalDamage, isSpecial);
         if (_hp <= 0)
         {
             _destroyAnimation.Play();
