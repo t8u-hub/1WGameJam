@@ -10,5 +10,5 @@ public class TutorialSceneView : SceneViewBase
 
 public class TutorialSceneController : SceneControllerBase<TutorialSceneView>
 {
-
+    protected override BgmAudioamager.BgmType GetBgmType() => BgmAudioamager.BgmType.Result;
 }

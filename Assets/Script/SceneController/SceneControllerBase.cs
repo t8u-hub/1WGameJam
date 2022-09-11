@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class SceneData
 {
+    protected abstract BgmAudioamager.BgmType GetBgmType();
+
     public virtual IEnumerator OnEndScene()
     {
         yield break;
@@ -12,6 +14,7 @@ public abstract class SceneData
 
     public virtual IEnumerator OnLoadScene()
     {
+        BgmAudioamager.Instance.PlayBgm(GetBgmType());
         yield break;
     }
 
