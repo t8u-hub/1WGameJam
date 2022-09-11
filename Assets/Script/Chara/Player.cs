@@ -509,7 +509,6 @@ public class Player : MonoSingleton<Player>
             // CsvDefine.ActionData.AttackType からActionTypeへキャストするため＋1する
             _actionEnableStateDict[(ActionType)weapon.Type + 1].ReleaseAction();
 
-
             var maxWeaponLevel = _equipWeaponDict.Select(data =>
                 {
                     if (data.Value == null) return 0;

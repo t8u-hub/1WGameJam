@@ -48,6 +48,9 @@ public class BattleWaveModel
 
     private float _currentWaveTime = 0;
 
+    public bool AllWaveEnd => _allWaveEnd;
+    private bool _allWaveEnd = false;
+
     public BattleWaveModel()
     {
         // Wave一覧とどんな条件でWaveが終わるか情報
@@ -138,7 +141,7 @@ public class BattleWaveModel
         {
             if (_currentWaveId >= _waveList.Count)
             {
-                // リザルトへ遷移？
+                _allWaveEnd = true;
             }
             else
             {

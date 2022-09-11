@@ -53,4 +53,10 @@ public class GameSceneController : SceneControllerBase<GameSceneView>
         UIManager.Instance.FadeIn(() => complete = true);
         yield return waitComplete;
     }
+
+    public override IEnumerator OnEndScene()
+    {
+        yield return new WaitForSeconds(0.3f);
+        yield return base.OnEndScene();
+    }
 }
