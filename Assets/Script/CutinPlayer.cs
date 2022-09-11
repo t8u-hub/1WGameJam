@@ -13,11 +13,21 @@ public class CutinPlayer : MonoBehaviour
         "Chara/Lv3/0311_special_2",
     };
 
+    private static readonly string[] bgPathArray =
+{
+        "Chara/Lv1/special_attack_bg_01",
+        "Chara/Lv2/special_attack_bg_02",
+        "Chara/Lv3/special_attack_bg_03",
+    };
+
     [SerializeField]
     private Animator animator;
 
     [SerializeField]
     private Image _image;
+
+    [SerializeField]
+    private Image _bgImage;
 
     int _level;
 
@@ -25,6 +35,7 @@ public class CutinPlayer : MonoBehaviour
     {
         _level = level;
         _image.sprite = Resources.Load<Sprite>(pathArray[(_level - 1) * 2]);
+        _bgImage.sprite = Resources.Load<Sprite>(bgPathArray[level - 1]);
         animator.Play("New State");
     }
 
